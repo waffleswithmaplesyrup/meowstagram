@@ -4,13 +4,15 @@ import { Routes, Route } from "react-router-dom";
 
 //* pages
 import HomePage from "../HomePage/HomePage";
-import ProfilePage from "../ProfilePage/ProfilePage";
 import SearchPage from "../SearchPage/SearchPage";
 import CreatePage from "../CreatePage/CreatePage";
 import DonatePage from "../DonatePage/DonatePage";
 import AuthPage from "../AuthPage/AuthPage";
 import LandingPage from "../LandingPage/LandingPage";
 import ErrorPage from "../ErrorPage/ErrorPage";
+
+import ProfilePage from "../ProfilePage/ProfilePage";
+import PostPage from "../PostPage/PostPage";
 
 
 //* components
@@ -34,6 +36,7 @@ export default function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/profile' element={<ProfilePage />} />
+          <Route path='/post/' element={<PostPage />} />
           <Route path='/search' element={<SearchPage />} />
           <Route path='/create' element={<CreatePage />} />
           <Route path='/donate' element={<DonatePage />} />
