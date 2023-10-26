@@ -9,8 +9,8 @@ const ensureLoggedIn = require("./config/ensureLoggedIn");
 
 //* Routers
 const usersRouter = require("./routes/usersRouter");
-const postsRouter = require("./routes/postsRouter");
-const followersRouter = require("./routes/followersRouter");
+// const postsRouter = require("./routes/postsRouter");
+// const followersRouter = require("./routes/followersRouter");
 
 //* App
 const app = express();
@@ -24,8 +24,8 @@ app.use(checkToken);
 
 //* Routes -> all routes to start with /api
 app.use("/api/users", usersRouter);
-app.use("/api/posts", ensureLoggedIn, postsRouter);
-app.use("/api/followers", ensureLoggedIn, followersRouter);
+// app.use("/api/posts", ensureLoggedIn, postsRouter);
+// app.use("/api/followers", ensureLoggedIn, followersRouter);
 
 //? This should be the last route -> this is for react router
 app.get("/*", (req, res) => {
