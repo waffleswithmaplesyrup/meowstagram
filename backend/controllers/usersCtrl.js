@@ -16,8 +16,8 @@ async function signup(req, res) {
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
     const query = `INSERT INTO users (username, email, password) VALUES ('${username}', '${email}', '${hashedPassword}') RETURNING *;`;
-    const newUser = await pool.query(query);
-
+    const data = await pool.query(query);
+    const newUser = data.rows[0];
     debug("created new user: %o", req.body);
     const token = createJWT(newUser);
     sendResponse(res, 201, { token: token });

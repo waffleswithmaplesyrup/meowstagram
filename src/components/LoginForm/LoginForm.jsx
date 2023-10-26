@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-// import { login } from "../../utilities/users-service";
+import { Link, useNavigate } from "react-router-dom";
+import { loginService } from "../../utilities/users/users-service";
 
 export default function LoginForm({ updateUser }) {
+  const navigate = useNavigate();
+
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
@@ -23,10 +25,12 @@ export default function LoginForm({ updateUser }) {
     event.preventDefault();
 
     try {
-      const user = await login(credentials);
+      const user = await loginService(credentials);
       console.log(user);
 
       updateUser(user);
+
+      navigate("/");
       
     } catch {
       setError("Log In Failed - Try Again");

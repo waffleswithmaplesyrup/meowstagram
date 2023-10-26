@@ -1,6 +1,15 @@
+import debug from "debug";
+
+const log = debug("meowstagram:src:App");
+localStorage.debug = "meowstagram:*";
+
+log("Start React");
+
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
+//* get user
+import { getUser } from "../../utilities/users/users-service";
 
 //* pages
 import HomePage from "../HomePage/HomePage";
@@ -10,7 +19,6 @@ import DonatePage from "../DonatePage/DonatePage";
 import AuthPage from "../AuthPage/AuthPage";
 import LandingPage from "../LandingPage/LandingPage";
 import ErrorPage from "../ErrorPage/ErrorPage";
-
 import ProfilePage from "../ProfilePage/ProfilePage";
 import PostPage from "../PostPage/PostPage";
 
@@ -23,16 +31,21 @@ import Footer from "../../components/Footer/Footer";
 
 
 export default function App() {
-  const data = { name: 'Simon', profilePic: 'simon.png'};
 
-  const [user, setUser] = useState(data);
-  
+  const [user, setUser] = useState(getUser());
+
+  const updateUser = (update) => {
+    setUser(update);
+  };
+
+  // console.log(user);
+
   return (
    <main>
     {
       user ? (
       <>
-        <NavBar user={user}/>
+        <NavBar user={user} updateUser={updateUser}/>
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/profile' element={<ProfilePage />} />
@@ -45,9 +58,9 @@ export default function App() {
         <Routes>
           {/* <Route path='/' element={<LandingPage />}/> */}
           <Route path='/' element={<AuthPage />} >
-            <Route path='' element={<LoginForm />} />
-            <Route path='login' element={<LoginForm />} />
-            <Route path='signup' element={<SignUpForm />} />
+            <Route path='' element={<LoginForm updateUser={updateUser} />} />
+            <Route path='login' element={<LoginForm updateUser={updateUser} />} />
+            <Route path='signup' element={<SignUpForm updateUser={updateUser} />} />
             <Route path='*' element={<ErrorPage />}/>
           </Route>
         </Routes>

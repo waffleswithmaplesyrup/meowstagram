@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
-// import { signUp } from "../../utilities/users-service";
+import { signUpService } from "../../utilities/users/users-service";
+
 
 export default class SignUpForm extends Component {
 
@@ -28,11 +29,13 @@ export default class SignUpForm extends Component {
       delete formData.error;
       delete formData.confirm;
 
-      const user = await signUp(formData);
+      const user = await signUpService(formData);
       // Baby step!
-      console.log(user);
+      // console.log(user);
 
       this.props.updateUser(user);
+
+      window.location = "/";
 
     } catch {
       this.setState({error: "Sign Up Failed - Try Again"});
@@ -41,7 +44,7 @@ export default class SignUpForm extends Component {
 
 
   render() {
-    const disable = this.state.password !== this.state.confirm;
+    const disable = (this.state.password !== this.state.confirm) || (this.state.password.length < 3);
     return (
       <div>
         <div className="form-container">
