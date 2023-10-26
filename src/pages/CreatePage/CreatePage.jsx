@@ -1,7 +1,7 @@
 export default function CreatePage () {
 
   return (
-    <div>
+    <div className="w-100 text-center py-5">
       <p>Create New Post</p>
       <hr />
       <div>

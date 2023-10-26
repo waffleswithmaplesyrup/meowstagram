@@ -1,7 +1,7 @@
 export default function ProfilePage () {
 
   return (
-    <div>
+    <div className="w-100 text-center">
       Profile Page
     </div>
   );

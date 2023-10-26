@@ -4,7 +4,7 @@ export default function SearchPage () {
   const [results, setResults] = useState([]);
 
   return (
-    <div>
+    <div className="w-100 text-center py-5">
       <SearchBar />  
       {
         results.length === 0 ? 

@@ -1,9 +1,9 @@
-export default function PostAuthor () {
+export default function PostAuthor({ post }) {
 
   return (
     <div>
       <img src='' alt='profile pic' />
-      <p>username</p>
+      <p>{post.username}</p>
       <p>post caption</p>
       <p>date</p>
     </div>

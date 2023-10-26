@@ -41,14 +41,14 @@ export default function App() {
   // console.log(user);
 
   return (
-   <main>
+   <main className="d-flex justify-content-between">
     {
       user ? (
       <>
         <NavBar user={user} updateUser={updateUser}/>
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path='/profile' element={<ProfilePage />} />
+          <Route path='/profile/:username' element={<ProfilePage />} />
           <Route path='/post/' element={<PostPage />} />
           <Route path='/search' element={<SearchPage />} />
           <Route path='/create' element={<CreatePage />} />
@@ -66,7 +66,7 @@ export default function App() {
         </Routes>
       )
     }
-    <Footer />
+    {/* <Footer /> */}
     
     
    </main>
