@@ -1,4 +1,4 @@
-const debug = require("debug")("meowstagram:backend:controllers:usersCtrl");
+const debug = require("debug")("meowstagram:backend:controllers:postsCtrl");
 const sendResponse = require("../config/sendResponseHelper");
 
 const pool = require('../config/database');
@@ -7,7 +7,7 @@ const pool = require('../config/database');
 async function userPosts(req, res) {
   try {
     const { username } = req.params;
-    const query = `SELECT posts.id, photo, date_posted, status FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE users.username = $1 ;`;
+    const query = `SELECT username, profile_pic, bio, posts.id, photo, date_posted, status FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE users.username = $1 ;`;
     const data = await pool.query(query, [username]);
     const posts = data.rows;
     sendResponse(res, 200, { posts });
@@ -31,6 +31,20 @@ const viewPost = async (req, res) => {
     sendResponse(res, 500, null, "Error getting post");
   }
 };
+
+const AWS_S3_OBJECT_URL = process.env.AWS_S3_OBJECT_URL;
+
+function uploadImg(req, res) {
+  debug("files received: %o", req.files);
+  const { files } = req;
+  const imgURLs = files.map((file) => {
+    return `${AWS_S3_OBJECT_URL}/${file.processedImage.key}`;
+  });
+  debug("image converted to url:", imgURLs);
+  res
+    .status(201)
+    .json({ message: "Image successfully uploaded to S3", imageURLs: imgURLs });
+}
 
 async function createNewPost(req, res) {
   
@@ -80,6 +94,7 @@ async function del(req, res) {
 module.exports = {
   userPosts,
   viewPost,
+  uploadImg,
   createNewPost,
   del
 };

@@ -12,6 +12,10 @@ export function viewOnePostAPI(username, postID) {
   return sendRequest(`${BASE_URL}/${username}/${postID}`);
 }
 
+export function uploadToS3API(imgFormData) {
+  return sendRequest(`${BASE_URL}/new/upload`, "POST", imgFormData, true);
+}
+
 export function createNewPostAPI(userID, postData) {
   return sendRequest(`${BASE_URL}/${userID}/new`, "POST", postData);
 }
