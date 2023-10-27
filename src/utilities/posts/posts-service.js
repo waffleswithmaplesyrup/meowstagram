@@ -3,6 +3,7 @@ import {
   viewOnePostAPI, 
   uploadToS3API,
   createNewPostAPI, 
+  editPostAPI,
   deleteOnePostAPI 
 } from "./posts-api";
 
@@ -27,6 +28,11 @@ export async function uploadToS3Service(imgFormData) {
 export async function createNewPostService(userID, postData) {
   const newPost = await createNewPostAPI(userID, postData);
   return newPost;
+}
+
+export async function editPostService(postID, newCaption) {
+  const editedPost = await editPostAPI(postID, newCaption);
+  return editedPost;
 }
 
 export async function deleteOnePostService(postID) {

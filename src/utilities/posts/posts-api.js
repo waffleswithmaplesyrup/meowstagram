@@ -20,6 +20,10 @@ export function createNewPostAPI(userID, postData) {
   return sendRequest(`${BASE_URL}/${userID}/new`, "POST", postData);
 }
 
+export function editPostAPI(postID, newCaption) {
+  return sendRequest(`${BASE_URL}/${postID}/edit`, "PATCH", newCaption);
+}
+
 export function deleteOnePostAPI(postID) {
   return sendRequest(`${BASE_URL}/${postID}`, "DELETE");
 }

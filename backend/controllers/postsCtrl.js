@@ -74,6 +74,23 @@ async function createNewPost(req, res) {
   }
 }
 
+async function editCaption(req, res) {
+  try {
+
+    debug("see req.params: %o", req.params);
+    const { postID } = req.params;
+    const { caption } = req.body;
+
+    const query = `UPDATE posts SET caption = $1 WHERE posts.id = $2 RETURNING *;`;
+    await pool.query(query, [caption, postID]);
+
+    debug('Post updated successfully!');
+    sendResponse(res, 200);
+  } catch (err) {
+    sendResponse(res, 500, null, "Error updating post");
+  }
+}
+
 async function del(req, res) {
   try {
 
@@ -96,5 +113,6 @@ module.exports = {
   viewPost,
   uploadImg,
   createNewPost,
+  editCaption,
   del
 };

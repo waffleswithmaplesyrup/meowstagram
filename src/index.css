@@ -18,7 +18,7 @@ body {
 }
 
 .image-grid {
-  width: 700px;
+  width: 750px;
   margin: auto;
   display: grid;
   gap: 5px;
@@ -26,7 +26,9 @@ body {
 }
 
 .image-grid img {
-  width: 100%;
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
   border-radius: 5px;
 }
 
