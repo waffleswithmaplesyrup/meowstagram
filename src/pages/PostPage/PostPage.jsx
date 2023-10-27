@@ -38,14 +38,21 @@ export default function PostPage () {
     //   </div>
     // </div>
     
-    <div>
-      <img src={post.photo} alt="post image" />
-      <p>{post.caption}</p>
+    <div> 
+      {
+        post.length === 0 ? "" : (
+          <div>
+            <img src={post.photo} alt="post image" />
+            <p>{post.caption}</p>
 
-      <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
-      <p>{post.username}</p>
+            <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
+            <p>{post.username}</p>
 
-      <p>{date.toDateString()}</p>
+            <p>{date.toDateString()}</p>
+          </div>
+        )
+      }
+      
     </div>
 
 

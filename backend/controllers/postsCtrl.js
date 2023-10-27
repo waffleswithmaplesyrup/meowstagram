@@ -19,10 +19,10 @@ async function userPosts(req, res) {
 
 const viewPost = async (req, res) => {
   try {
-    const { postID } = req.params;
+    const { username, postID } = req.params;
   
-    const query = `SELECT posts.id, photo, caption, date_posted, user_id, status, username, profile_pic FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE posts.id = $1;`;
-    const data = await pool.query(query, [postID]);
+    const query = `SELECT posts.id, photo, caption, date_posted, user_id, status, username, profile_pic FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE posts.id = $1 AND users.username = $2;`;
+    const data = await pool.query(query, [postID, username]);
     const post = data.rows;
     sendResponse(res, 200, { post });
     debug("fetch post successfully");
