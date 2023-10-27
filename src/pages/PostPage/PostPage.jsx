@@ -4,7 +4,7 @@ import Comments from "../../components/Comments/Comments";
 
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { editPostService, viewOnePostService } from "../../utilities/posts/posts-service";
+import { deleteOnePostService, editPostService, viewOnePostService } from "../../utilities/posts/posts-service";
 import { getUser } from "../../utilities/users/users-service";
 
 export default function PostPage () {
@@ -23,7 +23,7 @@ export default function PostPage () {
   }, [username, postID]);
 
   const date = new Date(post.date_posted);
-  console.log(date);
+  // console.log(date);
 
   return (
     // <div>
@@ -45,7 +45,7 @@ export default function PostPage () {
       {
         post.length === 0 ? "" : (
           <div>
-            <img src={post.photo} alt="post image" />
+            <img className="post-image" src={post.photo} alt="post image" />
             <p>{post.caption}</p>
 
             <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
@@ -53,8 +53,8 @@ export default function PostPage () {
             {
               yourPost && (
                 <div>
-                  <EditPost post={post}/>
-                  <DeletePost />
+                  <EditPost post={post} />
+                  <DeletePost post={post} />
                 </div>
               )
             }
@@ -142,10 +142,42 @@ function EditPost({ post }) {
   );
 }
 
-function DeletePost() {
+function DeletePost({ post }) {
+
+  const handleDelete = async () => {
+    console.log("delete post id:", post.id);
+    
+
+
+    // const prompt = await Swal.fire({
+    //   ...swalBasicSettings("Proceed to delete?", "warning"),
+    //   text: "Your favourite outfit containing this apparel will also be deleted.",
+    //   showCancelButton: true,
+    //   confirmButtonText: "DELETE",
+    //   cancelButtonText: "CANCEL",
+    // });
+
+    // if (prompt.isConfirmed) {
+      try {
+        await deleteOnePostService(post.id);
+        
+        window.location = `/profile/${post.username}`;
+
+        // Swal.fire(swalBasicSettings("Deleted!", "success"));
+      } catch (err) {
+        console.error(err);
+        // Swal.fire({
+        //   ...swalBasicSettings("Error", "error"),
+        //   text: "Unable to delete. Please try again!",
+        // });
+      }
+    // }
+
+  };
+
   return (
-    <>
-      <button>delete</button>  
-    </>
+    <button
+    onClick={handleDelete} 
+    type="button" className="btn btn-danger">Delete</button>
   );
 }

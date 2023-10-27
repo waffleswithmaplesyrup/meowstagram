@@ -35,3 +35,9 @@ body {
 .pink-bg {
   background-color: #FFF0F5;
 }
+
+.post-image {
+  width: 500px;
+  height: 500px;
+  object-fit: cover;
+}
