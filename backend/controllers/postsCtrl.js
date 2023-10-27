@@ -7,8 +7,8 @@ const pool = require('../config/database');
 async function userPosts(req, res) {
   try {
     const { userID } = req.params;
-    const query = `SELECT posts.id, photo, date_posted, status FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE users.id = '${ userID }' ;`;
-    const data = await pool.query(query);
+    const query = `SELECT posts.id, photo, date_posted, status FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE users.id = $1 ;`;
+    const data = await pool.query(query, [userID]);
     const posts = data.rows;
     sendResponse(res, 200, { posts });
     debug("fetch all posts by user successfully");
@@ -21,8 +21,8 @@ const viewPost = async (req, res) => {
   try {
     const { postID } = req.params;
   
-    const query = `SELECT posts.id, photo, caption, date_posted, user_id, status, username, profile_pic FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE posts.id = ${ postID };`;
-    const data = await pool.query(query);
+    const query = `SELECT posts.id, photo, caption, date_posted, user_id, status, username, profile_pic FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE posts.id = $1;`;
+    const data = await pool.query(query, [postID]);
     const post = data.rows;
     sendResponse(res, 200, { post });
     debug("fetch post successfully");
@@ -41,8 +41,8 @@ async function createNewPost(req, res) {
 
     const { photo, caption } = req.body;
     const { userID } = req.params;
-    const query = `INSERT INTO posts (photo, caption, user_id) VALUES ('${photo}', '${caption}', '${userID}') RETURNING *;`;
-    const newPost = await pool.query(query);
+    const query = `INSERT INTO posts (photo, caption, user_id) VALUES ($1, $2, $3) RETURNING *;`;
+    const newPost = await pool.query(query, [photo, caption, userID]);
     res.json(newPost.rows);
 
   } catch (err) {
@@ -66,8 +66,8 @@ async function del(req, res) {
     debug("see req.params: %o", req.params);
     const { postID } = req.params;
 
-    const query = `DELETE FROM posts WHERE posts.id = ${ postID } RETURNING *;`;
-    await pool.query(query);
+    const query = `DELETE FROM posts WHERE posts.id = $1 RETURNING *;`;
+    await pool.query(query, [postID]);
 
     debug('Post deleted successfully!');
     sendResponse(res, 200);

@@ -13,10 +13,12 @@ async function signup(req, res) {
 
     const { username, email, password } = req.body
 
+    if (password.length < 8) throw new Error("Password is too short. Please input at least 8 characters");
+    
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-    const query = `INSERT INTO users (username, email, password) VALUES ('${username}', '${email}', '${hashedPassword}') RETURNING *;`;
-    const data = await pool.query(query);
+    const query = "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *;";
+    const data = await pool.query(query, [username, email, hashedPassword]);
     const newUser = data.rows[0];
     debug("created new user: %o", req.body);
     const token = createJWT(newUser);
@@ -27,12 +29,6 @@ async function signup(req, res) {
     let status = 500;
     let message = "Internal Server Error";
 
-    if (err.name === "ValidationError") {
-      if (err.errors.password.kind === "minlength") {
-        status = 400;
-        message = "Password is too short. Please input at least 8 characters";
-      }
-    }
     if (err.code === 11000 && err.keyValue.username) {
       status = 409;
       message = "Username already exists.";
@@ -50,8 +46,8 @@ async function login(req, res) {
   try {
     // const user = await User.findOne({ username: req.body.username });
 
-    const query = `SELECT * FROM users WHERE email = '${req.body.email}';`;
-    const data = await pool.query(query);
+    const query = "SELECT * FROM users WHERE email = $1;";
+    const data = await pool.query(query, [req.body.email]);
     const user = data.rows[0];
     debug("user", user);
 
@@ -94,8 +90,8 @@ const getOne = async (req, res) => {
     const { id } = req.params;
     // debug(id);
 
-    const query = `SELECT * FROM users WHERE id = ${id};`;
-    const user = await pool.query(query);
+    const query = `SELECT * FROM users WHERE id = $1;`;
+    const user = await pool.query(query, [id]);
     res.json(user);
 
     debug("fetch user successfully");
@@ -110,8 +106,8 @@ async function deactivate(req, res) {
   try {
     const { id } = req.params;
 
-    const query = `DELETE FROM users WHERE id = ${id} RETURNING *;`;
-    await pool.query(query);
+    const query = `DELETE FROM users WHERE id = $1 RETURNING *;`;
+    await pool.query(query, [id]);
     
     debug('User deleted successfully!');
     sendResponse(res, 200);
