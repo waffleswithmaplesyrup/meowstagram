@@ -16,3 +16,20 @@ body {
   border-radius: 50%;
   object-fit: cover;
 }
+
+.image-grid {
+  width: 700px;
+  margin: auto;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.image-grid img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.pink-bg {
+  background-color: #FFF0F5;
+}

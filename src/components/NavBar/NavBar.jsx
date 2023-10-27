@@ -17,13 +17,13 @@ export default function NavBar ({ user, updateUser }) {
       <img src="" alt="logo" />
       <span className="fs-4">meowstagram</span>
     </Link>
-    <hr />
+    <br />
     <div className="text-center">
       <Link to={`/profile/${user.username}`}><img className="profile-pic" src={user.profile_pic} alt='profile pic'/></Link>
       <p className="pt-3">Welcome, {user.username}!</p>
     </div>
       
-    <hr />
+    <br />
     <ul className="nav nav-pills flex-column mb-auto">
       <li>
         <Link to="/" className="nav-link link-dark">

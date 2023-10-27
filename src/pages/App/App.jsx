@@ -49,7 +49,7 @@ export default function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/profile/:username' element={<ProfilePage />} />
-          <Route path='/post/' element={<PostPage />} />
+          <Route path='/profile/:username/:postID' element={<PostPage />} />
           <Route path='/search' element={<SearchPage />} />
           <Route path='/create' element={<CreatePage />} />
           <Route path='/donate' element={<DonatePage />} />

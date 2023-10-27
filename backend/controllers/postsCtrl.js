@@ -6,9 +6,9 @@ const pool = require('../config/database');
 //* the posts that show in a user's profile
 async function userPosts(req, res) {
   try {
-    const { userID } = req.params;
-    const query = `SELECT posts.id, photo, date_posted, status FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE users.id = $1 ;`;
-    const data = await pool.query(query, [userID]);
+    const { username } = req.params;
+    const query = `SELECT posts.id, photo, date_posted, status FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE users.username = $1 ;`;
+    const data = await pool.query(query, [username]);
     const posts = data.rows;
     sendResponse(res, 200, { posts });
     debug("fetch all posts by user successfully");
