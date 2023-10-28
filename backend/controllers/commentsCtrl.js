@@ -36,8 +36,24 @@ async function createNewComment(req, res) {
   }
 }
 
+async function deleteComment(req, res) {
+  try {
+
+    debug("see req.params: %o", req.params);
+    const { commentID } = req.params;
+
+    const query = `DELETE FROM comments WHERE comments.id = $1 RETURNING *;`;
+    await pool.query(query, [commentID]);
+
+    debug('Comment deleted successfully!');
+    sendResponse(res, 200);
+  } catch (err) {
+    sendResponse(res, 500, null, "Error deleting comment");
+  }
+}
+
 module.exports = {
   createNewComment,
-
+  deleteComment
 
 };
