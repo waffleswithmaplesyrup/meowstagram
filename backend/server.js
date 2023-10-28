@@ -10,6 +10,7 @@ const ensureLoggedIn = require("./config/ensureLoggedIn");
 //* Routers
 const usersRouter = require("./routes/usersRouter");
 const postsRouter = require("./routes/postsRouter");
+const commentsRouter = require("./routes/commentsRouter");
 // const followersRouter = require("./routes/followersRouter");
 
 //* App
@@ -26,6 +27,7 @@ app.use(checkToken);
 app.use("/api/users", usersRouter);
 // app.use("/api/posts", ensureLoggedIn, postsRouter);
 app.use("/api/posts", postsRouter);
+app.use("/api/comments", commentsRouter);
 // app.use("/api/followers", ensureLoggedIn, followersRouter);
 
 //? This should be the last route -> this is for react router

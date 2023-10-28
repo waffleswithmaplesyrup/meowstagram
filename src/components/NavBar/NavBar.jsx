@@ -1,14 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { logOutService } from "../../utilities/users/users-service";
 
 export default function NavBar ({ user, updateUser }) {
+  const navigate = useNavigate();
 
   const handleLogout = (event) => {
     event.preventDefault();
     logOutService();
     updateUser(null);
-    // navigate("/");
+    navigate("/");
   };
 
   return (

@@ -1,5 +1,5 @@
 CREATE TABLE posts (
-	id serial PRIMARY KEY,
+  id varchar NOT NULL UNIQUE PRIMARY KEY,
   photo varchar NOT NULL,
   caption text DEFAULT '',
   date_posted TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -23,6 +23,6 @@ CREATE TABLE comments (
 	id serial PRIMARY KEY,
   content text NOT NULL,
   date_commented timestamptz DEFAULT CURRENT_TIMESTAMP,
-  post_id integer NOT NULL REFERENCES posts (id),
+  post_id varchar NOT NULL REFERENCES posts (id),
   sender_id integer NOT NULL REFERENCES users (id)
 );

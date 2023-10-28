@@ -27,7 +27,7 @@ export async function uploadToS3Service(imgFormData) {
 
 export async function createNewPostService(userID, postData) {
   const newPost = await createNewPostAPI(userID, postData);
-  return newPost;
+  return newPost[0];
 }
 
 export async function editPostService(postID, newCaption) {

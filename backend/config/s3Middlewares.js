@@ -20,7 +20,7 @@ const s3 = new AWS.S3({
   region: AWS_REGION,
 });
 
-debug("s3 object: %o", s3);
+// debug("s3 object: %o", s3);
 
 const upload = multer({ storage: multer.memoryStorage() }).array("images", 10);
 

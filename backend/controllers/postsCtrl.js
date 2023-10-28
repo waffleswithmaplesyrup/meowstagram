@@ -2,12 +2,13 @@ const debug = require("debug")("meowstagram:backend:controllers:postsCtrl");
 const sendResponse = require("../config/sendResponseHelper");
 
 const pool = require('../config/database');
+const uuid = require('uuid');
 
 //* the posts that show in a user's profile
 async function userPosts(req, res) {
   try {
     const { username } = req.params;
-    const query = `SELECT username, profile_pic, bio, posts.id, photo, date_posted, status FROM posts LEFT JOIN users ON users.id = posts.user_id WHERE users.username = $1 ;`;
+    const query = `SELECT username, profile_pic, bio, posts.id, photo, date_posted, status FROM users LEFT JOIN posts ON users.id = posts.user_id WHERE users.username = $1 ;`;
     const data = await pool.query(query, [username]);
     const posts = data.rows;
     sendResponse(res, 200, { posts });
@@ -55,8 +56,9 @@ async function createNewPost(req, res) {
 
     const { photo, caption } = req.body;
     const { userID } = req.params;
-    const query = `INSERT INTO posts (photo, caption, user_id) VALUES ($1, $2, $3) RETURNING *;`;
-    const newPost = await pool.query(query, [photo, caption, userID]);
+    const uniqueId = uuid.v4();
+    const query = `INSERT INTO posts (id, photo, caption, user_id) VALUES ($1, $2, $3, $4) RETURNING *;`;
+    const newPost = await pool.query(query, [uniqueId, photo, caption, userID]);
     res.json(newPost.rows);
 
   } catch (err) {

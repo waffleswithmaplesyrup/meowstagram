@@ -3,6 +3,7 @@ import debug from "debug";
 import { useState } from "react";
 import { createNewPostService, uploadToS3Service } from "../../utilities/posts/posts-service";
 import { getUser } from "../../utilities/users/users-service";
+import { useNavigate } from "react-router-dom";
 
 const log = debug("meowstagram:src:pages:create");
 
@@ -10,6 +11,7 @@ export default function CreatePage () {
   const [selectedImage, setSelectedImage] = useState(null);
   const [caption, setCaption] = useState("");
   const [status, setStatus] = useState(null);
+  const navigate = useNavigate();
 
 
   const [imageFiles, setImageFiles] = useState({
@@ -57,10 +59,8 @@ export default function CreatePage () {
         photo: imgURL,
         caption: caption
       });
-      console.log(newPost);
-      // Swal.fire(swalBasicSettings("Added to Wardrobe!", "success"));
-      // setApparel([...apparel, newPost]);
-      // resetApparelForm();
+      console.log('new post created:', newPost);
+      navigate(`/profile/${getUser().username}/${newPost.id}`);
     } catch (err) {
       if (err.message === "Unexpected end of JSON input") {
         // Swal.fire({
