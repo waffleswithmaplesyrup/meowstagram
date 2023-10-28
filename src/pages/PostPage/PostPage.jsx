@@ -2,6 +2,11 @@ import PostAuthor from "../../components/PostAuthor/PostAuthor";
 import PostInteractions from "../../components/PostInteractions/PostInteractions";
 import Comments from "../../components/Comments/Comments";
 
+import Debug from "debug";
+import { createNewCommentService, deleteCommentService, getAllCommentsService } from "../../utilities/comments/comments-service";
+
+import { likePostService, showAllLikesService, unlikePostService } from "../../utilities/likes/likes-service";
+
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { deleteOnePostService, editPostService, viewOnePostService } from "../../utilities/posts/posts-service";
@@ -10,12 +15,11 @@ import { getUser } from "../../utilities/users/users-service";
 export default function PostPage () {
   const { username, postID } = useParams();
   const [post, setPost] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [comments, setComments] = useState([]);
 
   const yourPost = username === getUser().username;
-  console.log("is this your post?", yourPost);
-  // const yourComment = comments.sender_id === getUser().id
-  // console.log("is this your comment?", yourComment);
+  // console.log("is this your post?", yourPost);
 
 
   useEffect(() => {
@@ -24,8 +28,11 @@ export default function PostPage () {
       // console.log(data);
       setPost(data);
       const commentsData = await getAllCommentsService(postID);
-      console.log(commentsData);
+      // console.log(commentsData);
       setComments(commentsData);
+      const likesData = await showAllLikesService(postID);
+      // console.log("likes:", likesData);
+      setLikes(likesData);
     };
     fetchPost();
   }, [username, postID]);
@@ -36,6 +43,12 @@ export default function PostPage () {
   const filterAfterDelete = (commentDeleted) => {
     setComments(comments.filter(comment => comment.id !== commentDeleted));
   };
+
+  if (likes.filter(like => like.sender_id === getUser().id).length > 0) {
+    console.log("you have liked this post");
+  } else {
+    console.log("you have not liked this post");
+  }
 
   return (
     // <div>
@@ -70,7 +83,11 @@ export default function PostPage () {
                 </div>
               )
             }
-            <p>{date.toDateString()}</p>
+            <LikeButton likes={likes} postID={postID} />
+            <div>
+              <p>{likes.length} like{likes.length === 1 ? "" : "s"}</p>
+              <p>{date.toDateString()}</p>
+            </div>
             <div>
               {
                 comments.length === 0 ? <p>Be the first to comment</p> :
@@ -98,6 +115,37 @@ export default function PostPage () {
   );
 }
 
+function LikeButton({ likes, postID }) {
+  const [liked, setliked] = useState(false);
+
+  useEffect(() => {
+    if (likes.filter(like => like.sender_id === getUser().id).length > 0) {
+      setliked(true);
+    }
+  }, [likes]);
+  
+  const handleLike = async () => {
+    const newLike = await likePostService(postID);
+    console.log(newLike);
+    setliked(true);
+  };
+  console.log("liked:", liked);
+
+  const handleUnlike = async() => {
+    await unlikePostService(postID);
+    setliked(false);
+  };
+
+  return (
+    <div>
+    { liked ? 
+      <button onClick={handleUnlike}>unlike</button> : 
+      <button onClick={handleLike}>like</button>
+    }
+    </div>
+  );
+}
+
 function ImageCarousel () {
 
   return (
@@ -108,8 +156,7 @@ function ImageCarousel () {
 }
 
 
-import Debug from "debug";
-import { createNewCommentService, deleteCommentService, getAllCommentsService } from "../../utilities/comments/comments-service";
+
 const debug = Debug("meowstagram:EditPost");
 
 function EditPost({ post }) {
