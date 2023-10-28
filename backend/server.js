@@ -11,6 +11,7 @@ const ensureLoggedIn = require("./config/ensureLoggedIn");
 const usersRouter = require("./routes/usersRouter");
 const postsRouter = require("./routes/postsRouter");
 const commentsRouter = require("./routes/commentsRouter");
+const likesRouter = require("./routes/likesRouter");
 // const followersRouter = require("./routes/followersRouter");
 
 //* App
@@ -28,6 +29,7 @@ app.use("/api/users", usersRouter);
 // app.use("/api/posts", ensureLoggedIn, postsRouter);
 app.use("/api/posts", postsRouter);
 app.use("/api/comments", commentsRouter);
+app.use("/api/likes", likesRouter);
 // app.use("/api/followers", ensureLoggedIn, followersRouter);
 
 //? This should be the last route -> this is for react router

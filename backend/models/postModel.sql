@@ -15,7 +15,7 @@ CREATE TABLE photos (
 
 CREATE TABLE likes (
 	id serial PRIMARY KEY,
-  post_id integer NOT NULL REFERENCES posts (id),
+  post_id varchar NOT NULL REFERENCES posts (id),
   sender_id integer NOT NULL REFERENCES users (id)
 );
 

@@ -60,9 +60,9 @@ async function getAllComments(req, res) {
     const data = await pool.query(query, [postID]);
     const comments = data.rows;
     sendResponse(res, 200, { comments });
-    debug("fetch all posts by user successfully");
+    debug("fetch all comments successfully");
   } catch (err) {
-    sendResponse(res, 500, null, "Error getting all posts");
+    sendResponse(res, 500, null, "Error getting all comments");
   }
 }
 
