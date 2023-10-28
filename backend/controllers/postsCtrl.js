@@ -102,6 +102,12 @@ async function del(req, res) {
     const query = `DELETE FROM posts WHERE posts.id = $1 RETURNING *;`;
     await pool.query(query, [postID]);
 
+    const deleteComments = `DELETE FROM comments WHERE comments.post_id = $1 RETURNING *;`;
+    await pool.query(deleteComments, [postID]);
+
+    const deleteLikes = `DELETE FROM likes WHERE likes.post_id = $1 RETURNING *;`;
+    await pool.query(deleteLikes, [postID]);
+
     debug('Post deleted successfully!');
     sendResponse(res, 200);
   } catch (err) {
