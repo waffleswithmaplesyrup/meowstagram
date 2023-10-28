@@ -1,7 +1,8 @@
+import { getUser } from "../users/users-service";
 import { createNewCommentAPI, deleteCommentAPI, getAllCommentsAPI} from "./comments-api";
 
-export async function createNewCommentService(postID, commentData) {
-  const newComment = await createNewCommentAPI(postID, commentData);
+export async function createNewCommentService(postID, content) {
+  const newComment = await createNewCommentAPI(postID, { content, senderID: getUser().id});
   return newComment[0];
 }
 

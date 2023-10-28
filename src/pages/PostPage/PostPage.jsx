@@ -2,7 +2,7 @@ import PostAuthor from "../../components/PostAuthor/PostAuthor";
 import PostInteractions from "../../components/PostInteractions/PostInteractions";
 import Comments from "../../components/Comments/Comments";
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { deleteOnePostService, editPostService, viewOnePostService } from "../../utilities/posts/posts-service";
 import { getUser } from "../../utilities/users/users-service";
@@ -73,7 +73,7 @@ export default function PostPage () {
             <p>{date.toDateString()}</p>
             <div>
               {
-                comments.length === 0 ? <p>Be th  e first to comment</p> :
+                comments.length === 0 ? <p>Be the first to comment</p> :
                 comments?.map(comment => <div key={comment.id}>
                     <img src={comment.profile_pic} alt="profile pic" className="profile-pic-comment"/>
                     <p>{comment.username}</p>
@@ -87,6 +87,7 @@ export default function PostPage () {
                   )
               }
             </div>
+            <CreateNewComment username={username} postID={postID}/>
           </div>
         )
       }
@@ -106,18 +107,9 @@ function ImageCarousel () {
   );
 }
 
-function PostComment () {
-
-  return (
-    <div>
-      <textarea placeholder="Add a comment..." />
-      <button>Post</button>
-    </div>
-  );
-}
 
 import Debug from "debug";
-import { deleteCommentService, getAllCommentsService } from "../../utilities/comments/comments-service";
+import { createNewCommentService, deleteCommentService, getAllCommentsService } from "../../utilities/comments/comments-service";
 const debug = Debug("meowstagram:EditPost");
 
 function EditPost({ post }) {
@@ -248,5 +240,50 @@ function DeleteComment({ comment, filterAfterDelete }) {
     <button
     onClick={handleDelete} 
     type="button" className="btn btn-danger">Delete</button>
+  );
+}
+
+function CreateNewComment({ username, postID }) {
+  const [content, setContent] = useState('');
+  const [status, setStatus] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const newComment = await createNewCommentService(postID, content);
+      console.log('new comment created:', newComment);
+      window.location = `/profile/${username}/${postID}`;
+    } catch (err) {
+      if (err.message === "Unexpected end of JSON input") {
+        // Swal.fire({
+        //   ...swalBasicSettings("Internal Server Error", "error"),
+        //   text: "Please try again later.",
+        // });
+      } else {
+        // Swal.fire({
+        //   ...swalBasicSettings("Error", "error"),
+        //   text: err.message,
+        //   confirmButtonText: "Try Again",
+        // });
+      }
+      setStatus("error");
+    } finally {
+      setStatus("success");
+    }
+  };
+
+  return (
+    <form className="w-100 p-4" onSubmit={handleSubmit}>
+      <div className="form-outline form-floating mb-3" style={{width: "22rem", height: "10rem"}}>
+        <textarea onChange={(event) => setContent(event.target.value)} 
+          value={content} name="caption" placeholder="Add a comment" 
+          className="form-control h-100" id="floatingInput" rows="4"></textarea>
+        <label htmlFor="floatingInput">Add a comment</label>
+      </div>
+      <button>Post</button>
+    </form>
   );
 }
