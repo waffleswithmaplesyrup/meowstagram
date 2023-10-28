@@ -9,6 +9,7 @@ const commentsCtrl = require("../controllers/commentsCtrl");
 
 router.post("/:postID/new", commentsCtrl.createNewComment);
 router.delete("/:commentID", commentsCtrl.deleteComment);
+router.get("/:postID", commentsCtrl.getAllComments);
 
 // router.delete("/:postID", deleteFromS3, postsCtrl.del);
 

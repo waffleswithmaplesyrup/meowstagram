@@ -52,8 +52,23 @@ async function deleteComment(req, res) {
   }
 }
 
+//* get all comments from a post
+async function getAllComments(req, res) {
+  try {
+    const { postID } = req.params;
+    const query = `SELECT comments.id, content, date_commented, sender_id, username, profile_pic FROM comments LEFT JOIN users ON users.id = comments.sender_id WHERE comments.post_id = $1 ;`;
+    const data = await pool.query(query, [postID]);
+    const comments = data.rows;
+    sendResponse(res, 200, { comments });
+    debug("fetch all posts by user successfully");
+  } catch (err) {
+    sendResponse(res, 500, null, "Error getting all posts");
+  }
+}
+
 module.exports = {
   createNewComment,
-  deleteComment
+  deleteComment,
+  getAllComments
 
 };

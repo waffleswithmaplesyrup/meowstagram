@@ -10,20 +10,32 @@ import { getUser } from "../../utilities/users/users-service";
 export default function PostPage () {
   const { username, postID } = useParams();
   const [post, setPost] = useState([]);
+  const [comments, setComments] = useState([]);
+
   const yourPost = username === getUser().username;
   console.log("is this your post?", yourPost);
+  // const yourComment = comments.sender_id === getUser().id
+  // console.log("is this your comment?", yourComment);
+
 
   useEffect(() => {
     const fetchPost = async () => {
       const data = await viewOnePostService(username, postID);
-      console.log(data);
+      // console.log(data);
       setPost(data);
+      const commentsData = await getAllCommentsService(postID);
+      console.log(commentsData);
+      setComments(commentsData);
     };
     fetchPost();
   }, [username, postID]);
 
   const date = new Date(post.date_posted);
   // console.log(date);
+
+  const filterAfterDelete = (commentDeleted) => {
+    setComments(comments.filter(comment => comment.id !== commentDeleted));
+  };
 
   return (
     // <div>
@@ -58,8 +70,23 @@ export default function PostPage () {
                 </div>
               )
             }
-
             <p>{date.toDateString()}</p>
+            <div>
+              {
+                comments.length === 0 ? <p>Be th  e first to comment</p> :
+                comments?.map(comment => <div key={comment.id}>
+                    <img src={comment.profile_pic} alt="profile pic" className="profile-pic-comment"/>
+                    <p>{comment.username}</p>
+                    <p>{comment.content}</p>
+                    {
+                      comment.sender_id === getUser().id && (
+                        <DeleteComment comment={comment} filterAfterDelete={filterAfterDelete} />
+                      )
+                    }
+                  </div>
+                  )
+              }
+            </div>
           </div>
         )
       }
@@ -90,6 +117,7 @@ function PostComment () {
 }
 
 import Debug from "debug";
+import { deleteCommentService, getAllCommentsService } from "../../utilities/comments/comments-service";
 const debug = Debug("meowstagram:EditPost");
 
 function EditPost({ post }) {
@@ -162,6 +190,47 @@ function DeletePost({ post }) {
         await deleteOnePostService(post.id);
         
         window.location = `/profile/${post.username}`;
+
+        // Swal.fire(swalBasicSettings("Deleted!", "success"));
+      } catch (err) {
+        console.error(err);
+        // Swal.fire({
+        //   ...swalBasicSettings("Error", "error"),
+        //   text: "Unable to delete. Please try again!",
+        // });
+      }
+    // }
+
+  };
+
+  return (
+    <button
+    onClick={handleDelete} 
+    type="button" className="btn btn-danger">Delete</button>
+  );
+}
+
+function DeleteComment({ comment, filterAfterDelete }) {
+
+  const handleDelete = async () => {
+    console.log("delete comment id:", comment.id);
+    
+
+
+    // const prompt = await Swal.fire({
+    //   ...swalBasicSettings("Proceed to delete?", "warning"),
+    //   text: "Your favourite outfit containing this apparel will also be deleted.",
+    //   showCancelButton: true,
+    //   confirmButtonText: "DELETE",
+    //   cancelButtonText: "CANCEL",
+    // });
+
+    // if (prompt.isConfirmed) {
+      try {
+        await deleteCommentService(comment.id);
+        
+        // window.location = `/profile/${post.username}`;
+        filterAfterDelete(comment.id);
 
         // Swal.fire(swalBasicSettings("Deleted!", "success"));
       } catch (err) {
