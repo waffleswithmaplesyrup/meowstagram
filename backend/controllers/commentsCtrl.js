@@ -3,8 +3,6 @@ const sendResponse = require("../config/sendResponseHelper");
 
 const pool = require('../config/database');
 
-// const { getUser } = require("../../src/utilities/users/users-service");
-
 
 async function createNewComment(req, res) {
   
@@ -14,9 +12,8 @@ async function createNewComment(req, res) {
     debug("req.params: %o", req.params);
 
     const { content, senderID } = req.body;
-    // const { userID } = req.params;
     const { postID } = req.params;
-    // const senderID = getUser().id;
+    
     const query = `INSERT INTO comments (content, post_id, sender_id) VALUES ($1, $2, $3) RETURNING *;`;
     const newComment = await pool.query(query, [content, postID, senderID]);
     res.json(newComment.rows);

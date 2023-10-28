@@ -12,7 +12,7 @@ const usersRouter = require("./routes/usersRouter");
 const postsRouter = require("./routes/postsRouter");
 const commentsRouter = require("./routes/commentsRouter");
 const likesRouter = require("./routes/likesRouter");
-// const followersRouter = require("./routes/followersRouter");
+const followersRouter = require("./routes/followersRouter");
 
 //* App
 const app = express();
@@ -31,6 +31,7 @@ app.use("/api/posts", postsRouter);
 app.use("/api/comments", commentsRouter);
 app.use("/api/likes", likesRouter);
 // app.use("/api/followers", ensureLoggedIn, followersRouter);
+app.use("/api/followers", followersRouter);
 
 //? This should be the last route -> this is for react router
 app.get("/*", (req, res) => {
