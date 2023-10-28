@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const followersCtrl = require("../controllers/followersCtrl");
 
-router.post("/:recipientID/new", followersCtrl.followUser);
-router.delete("/:recipientID/:senderID", followersCtrl.unfollowUser);
-router.get("/:senderID", followersCtrl.showfollows);
+router.post("/:username/new", followersCtrl.followUser);
+router.delete("/:username/:senderID", followersCtrl.unfollowUser);
+router.get("/:username", followersCtrl.showfollows);
 
 module.exports = router;

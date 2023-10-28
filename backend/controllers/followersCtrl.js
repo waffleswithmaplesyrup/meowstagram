@@ -11,7 +11,10 @@ async function followUser(req, res) {
     debug("req.params: %o", req.params);
 
     const { senderID } = req.body;
-    const { recipientID } = req.params;
+    const { username } = req.params;
+
+    const recipientData = await pool.query("SELECT id FROM users WHERE username = $1;", [username]);
+    const recipientID = recipientData.rows[0].id;
 
     //* check if sender already followed recipient
     const queryCheck = `SELECT * FROM followers WHERE recipient_id = $1 AND follower_id = $2`;
@@ -45,7 +48,11 @@ async function unfollowUser(req, res) {
   try {
 
     debug("see req.params: %o", req.params);
-    const { recipientID, senderID } = req.params;
+    const { username, senderID } = req.params;
+
+
+    const recipientData = await pool.query("SELECT id FROM users WHERE username = $1;", [username]);
+    const recipientID = recipientData.rows[0].id;
 
     const query = `DELETE FROM followers WHERE recipient_id = $1 AND follower_id = $2 RETURNING *;`;
     await pool.query(query, [recipientID, senderID]);
@@ -60,7 +67,12 @@ async function unfollowUser(req, res) {
 //* get all followers and following or a user
 async function showfollows(req, res) {
   try {
-    const { senderID } = req.params;
+    const { username } = req.params;
+
+    const senderData = await pool.query("SELECT id FROM users WHERE username = $1;", [username]);
+    const senderID = senderData.rows[0].id;
+
+    debug("senderID", senderID);
 
     const queryFollowing = `SELECT recipient_id, username, profile_pic FROM followers LEFT JOIN users ON users.id = recipient_id WHERE follower_id = $1;`;
     const dataFollowing = await pool.query(queryFollowing, [senderID]);
@@ -72,9 +84,9 @@ async function showfollows(req, res) {
 
     // debug(following);
     sendResponse(res, 200, { following, followers });
-    debug("fetch all likes from a post successfully");
+    debug("fetch all follows successfully");
   } catch (err) {
-    sendResponse(res, 500, null, "Error getting all likes");
+    sendResponse(res, 500, null, "Error getting follows");
   }
 }
 

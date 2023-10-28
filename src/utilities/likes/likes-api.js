@@ -1,5 +1,4 @@
 import sendRequest from "../send-request/send-request";
-import { getUser } from "../users/users-service";
 
 const BASE_URL = "/api/likes";
 
