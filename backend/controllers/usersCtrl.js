@@ -91,8 +91,11 @@ const getOne = async (req, res) => {
     // debug(id);
 
     const query = `SELECT * FROM users WHERE id = $1;`;
-    const user = await pool.query(query, [id]);
-    res.json(user);
+    const data = await pool.query(query, [id]);
+    const user = data.rows[0];
+    const token = createJWT(user);
+  
+    sendResponse(res, 200, { token: token });
 
     debug("fetch user successfully");
 
@@ -116,6 +119,54 @@ async function deactivate(req, res) {
   }
 }
 
+async function updateUserBio(req, res) {
+  try {
+
+    debug("see req.params: %o", req.params);
+    const { id } = req.params;
+    const { bio } = req.body;
+
+    const query = `UPDATE users SET bio = $1 WHERE id = $2 RETURNING *;`;
+    await pool.query(query, [bio, id]);
+
+    debug('Bio updated successfully!');
+    sendResponse(res, 200);
+  } catch (err) {
+    sendResponse(res, 500, null, "Error updating bio");
+  }
+}
+
+const AWS_S3_OBJECT_URL = process.env.AWS_S3_OBJECT_URL;
+
+function uploadImg(req, res) {
+  debug("files received: %o", req.files);
+  const { files } = req;
+  const imgURLs = files.map((file) => {
+    return `${AWS_S3_OBJECT_URL}/${file.processedImage.key}`;
+  });
+  debug("image converted to url:", imgURLs);
+  res
+    .status(201)
+    .json({ message: "Image successfully uploaded to S3", imageURLs: imgURLs });
+}
+
+async function updateUserPic(req, res) {
+  try {
+
+    debug("see req.params: %o", req.params);
+    const { id } = req.params;
+    const { profile_pic } = req.body;
+    debug("profile pic:", profile_pic);
+    const query = `UPDATE users SET profile_pic = $1 WHERE id = $2 RETURNING *;`;
+    await pool.query(query, [profile_pic, id]);
+
+    debug('Profile pic updated successfully!');
+    sendResponse(res, 200);
+  } catch (err) {
+    sendResponse(res, 500, null, "Error updating profile pic");
+  }
+}
+
 //* ===== Helper Functions ===== *//
 
 function createJWT(user) {
@@ -127,5 +178,8 @@ module.exports = {
   login, 
   deactivate, 
   readAll,
-  getOne
+  getOne, 
+  updateUserBio,
+  uploadImg,
+  updateUserPic
 };

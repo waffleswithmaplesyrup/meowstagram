@@ -65,11 +65,9 @@ function uploadToS3(req, res, next) {
 }
 
 async function deleteFromS3(req, res, next) {
-  // const apparelToDelete = await Wardrobe.findById(req.params.apparelID);
   const { postID } = req.params;
   const query = `SELECT * FROM posts WHERE posts.id = $1;`;
   const postToDel = await pool.query(query, [postID]);
-  debug("apparelToDelete: %o", postToDel);
   if(!postToDel) {
     res.status(404).send("Post not found");
     return;
@@ -93,7 +91,44 @@ async function deleteFromS3(req, res, next) {
   return next();
 }
 
+async function deleteProfilePicFromS3(req, res, next) {
+  const { id } = req.params;
+  const query = `SELECT * FROM users WHERE id = $1;`;
+  const postToDel = await pool.query(query, [id]);
+  if(!postToDel) {
+    res.status(404).send("User not found");
+    return;
+  }
+  const picToDel = postToDel.rows[0].profile_pic;
+  debug("pic to delete", picToDel);
+
+  if (picToDel) {
+    const s3ObjectID = postToDel.rows[0].profile_pic.split('/')[3];
+    debug("s3ObjectID virtual:", s3ObjectID);
+  
+    if (s3ObjectID) {
+      const params = {
+        Bucket: AWS_BUCKET_NAME,
+        Key: s3ObjectID,
+      };
+    
+      try {
+        await s3.deleteObject(params).promise();
+        debug("successfully deleted s3 object");
+      } catch (err) {
+        console.error(err);
+        debug("error deleting from s3: %o", err);
+        return res.status(500).json({ err, message: "Error deleting image" });
+      }
+    }
+  }
+  
+  
+  return next();
+}
+
 module.exports = {
   uploadToS3, 
-  deleteFromS3
+  deleteFromS3,
+  deleteProfilePicFromS3
 };

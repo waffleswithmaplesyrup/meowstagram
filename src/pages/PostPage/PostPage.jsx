@@ -188,7 +188,7 @@ function EditPost({ post }) {
         <div className="modal-content">
 
           <div className="modal-header">
-            <h4 className="modal-title">Edit Todo</h4>
+            <h4 className="modal-title">Edit Caption</h4>
             <button type="button" className="btn-close" data-bs-dismiss="modal"
             onClick={() => setCaption(post.caption)}></button>
           </div>

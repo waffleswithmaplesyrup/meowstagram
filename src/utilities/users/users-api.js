@@ -13,3 +13,19 @@ export function loginAPI(credentials) {
 export async function deleteUserAPI(userID) {
   return sendRequest(`${BASE_URL}/${userID}`, "DELETE");
 }
+
+export function uploadToS3API(imgFormData) {
+  return sendRequest(`${BASE_URL}/new/upload`, "POST", imgFormData, true);
+}
+
+export function updateProfilePicAPI(userID, profilePic) {
+  return sendRequest(`${BASE_URL}/${userID}/updatePic`, "PATCH", profilePic);
+}
+
+export function updateUserBioAPI(userID, updatedBio) {
+  return sendRequest(`${BASE_URL}/${userID}/updateBio`, "PATCH", updatedBio);
+}
+
+export function getLoggedInUserAPI(userID) {
+  return sendRequest(`${BASE_URL}/${userID}`);
+}

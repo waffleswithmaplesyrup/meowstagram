@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { viewAllUserPostsService } from "../../utilities/posts/posts-service";
 import { followUserService, showFollowsService, unfollowUserService } from "../../utilities/followers/followers-service";
-import { getUser } from "../../utilities/users/users-service";
+import { getLoggedInUserService, getUser, updateProfilePicService, updateUserBioService, uploadToS3Service } from "../../utilities/users/users-service";
 
 export default function ProfilePage () {
   const { username } = useParams();
@@ -20,8 +20,6 @@ export default function ProfilePage () {
       const followInfo = await showFollowsService(username);
       setFollowers(followInfo.followers);
       setFollowing(followInfo.following);
-
-      // console.log(followInfo.followers);
 
       //* check if user has no posts
       if (data.length === 1 && data[0].id === null) {
@@ -48,7 +46,11 @@ export default function ProfilePage () {
           <p>{following.length} following</p>
           <p>{user[0].bio}</p>
           {
-            getUser().username === username ? <EditProfile /> :
+            getUser().username === username ? 
+            <div>
+              <EditProfilePic />
+              <EditProfileBio />
+            </div> :
             <FollowButton />
           }
           
@@ -81,7 +83,6 @@ function FollowButton() {
     fetchFollowing();
   }, [username]);
 
-  console.log(isFollowing);
 
   const handleUnfollow = async () => {
     console.log("unfollow", username);
@@ -107,10 +108,179 @@ function FollowButton() {
   );
 }
 
-function EditProfile() {
+function EditProfilePic() {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [status, setStatus] = useState(null);
+  
+
+  const [imageFiles, setImageFiles] = useState({
+    images: [],
+    preview: [],
+    filenames: [],
+  });
+
+  const handleImgFileInput = (e) => {
+    
+    setSelectedImage(e.target.files[0]);
+
+    const imgFiles = Array.from(e.target.files);
+    const updatedPreview = [];
+    const updatedFilenames = [];
+
+    imgFiles.forEach((img) => {
+      const imgUrl = URL.createObjectURL(img);
+      updatedPreview.push(imgUrl);
+      updatedFilenames.push(img.name);
+    });
+    setImageFiles({
+      images: [...imageFiles.images, ...imgFiles],
+      preview: [...imageFiles.preview, ...updatedPreview],
+      filenames: [...imageFiles.filenames, ...updatedFilenames],
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (imageFiles.images.length === 0) return;
+    setStatus("loading");
+
+    const imgFormData = new FormData();
+    imageFiles.images.forEach((img) => {
+      imgFormData.append("images", img);
+    });
+    // log("images appended to form", imgFormData);
+    try {
+      
+      const imgURL = await uploadToS3Service(imgFormData);
+      
+      const newPic = await updateProfilePicService({
+        profile_pic: imgURL,
+      });
+      console.log('new profile pic uploaded:', newPic);
+      await getLoggedInUserService();   //* fetch new getUser()
+
+      window.location = `/profile/${getUser().username}/`;
+    } catch (err) {
+      if (err.message === "Unexpected end of JSON input") {
+        // Swal.fire({
+        //   ...swalBasicSettings("Internal Server Error", "error"),
+        //   text: "Please try again later.",
+        // });
+      } else {
+        // Swal.fire({
+        //   ...swalBasicSettings("Error", "error"),
+        //   text: err.message,
+        //   confirmButtonText: "Try Again",
+        // });
+      }
+      setStatus("error");
+    } finally {
+      setStatus("success");
+    }
+  };
+
   return (
-    <div>
-      <button>edit profile</button>
+    <>
+    <button type="button" className="btn btn-warning" data-bs-toggle="modal" 
+    data-bs-target={`#idprofilePic`}>
+      Edit Profile Pic
+    </button>
+
+    <div className="modal" id={`idprofilePic`}>
+      <div className="modal-dialog">
+        <div className="modal-content">
+
+          <div className="modal-header">
+            <h4 className="modal-title">Upload New Profile Pic</h4>
+            <button type="button" className="btn-close" data-bs-dismiss="modal"
+            onClick={() => setSelectedImage(null)}></button>
+          </div>
+
+          <div className="modal-body">
+            <div>
+            {selectedImage && (
+              <div>
+                <img
+                  alt="not found"
+                  width={"250px"}
+                  src={URL.createObjectURL(selectedImage)}
+                />
+                <br />
+                <div className="d-flex justify-content-center align-items-center">
+            <div className="file-upload-wrapper" style={{width: "250px"}}>
+            <button className="form-control" onClick={() => setSelectedImage(null)}>Remove</button>
+          </div>
+          </div>
+              </div>
+            )}
+
+            <br />
+            
+            <div className="d-flex justify-content-center align-items-center">
+            <div className="file-upload-wrapper" style={{width: "22rem"}}>
+              <input onChange={handleImgFileInput} type="file" name="photo" id="input-file-now" className="file-upload form-control" />
+            </div>
+          </div>
+          </div>
+
+          </div>
+
+          <div className="modal-footer">
+            <button type="button" className="btn btn-warning" data-bs-dismiss="modal" onClick={handleSubmit}>Upload</button>
+          </div>
+        </div>
+      </div>
     </div>
+    </>
+  );
+}
+
+function EditProfileBio() {
+  const [bio, setBio] = useState(getUser().bio);
+
+  const updateBio = async (event) => {
+    event.preventDefault();
+
+    try {
+
+      await updateUserBioService({ bio });
+      await getLoggedInUserService();   //* fetch new getUser()
+      
+      window.location = `/profile/${getUser().username}/`;
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  return (
+    <>
+    <button type="button" className="btn btn-warning" data-bs-toggle="modal" data-bs-target={`#idprofileBio`}>
+      Edit Profile Bio
+    </button>
+
+    <div className="modal" id={`idprofileBio`}>
+      <div className="modal-dialog">
+        <div className="modal-content">
+
+          <div className="modal-header">
+            <h4 className="modal-title">Edit Bio</h4>
+            <button type="button" className="btn-close" data-bs-dismiss="modal"
+            onClick={() => setBio(getUser().bio)}></button>
+          </div>
+
+          <div className="modal-body">
+            <input type="text" className="form-control" 
+            value={bio} onChange={event => setBio(event.target.value)}/>
+          </div>
+
+          <div className="modal-footer">
+            <button type="button" className="btn btn-warning" data-bs-dismiss="modal" onClick={updateBio}>Edit</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </>
   );
 }

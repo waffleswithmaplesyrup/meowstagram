@@ -6,14 +6,16 @@ import PostInteractions from "../PostInteractions/PostInteractions";
 
 
 export default function Feed () {
-  const [feed, setFeed] = useState([
-    { username: "juju", profilePic: "", photo: "https://picsum.photos/id/237/200/"},
-    { username: "eva", profilePic: "", photo: "https://picsum.photos/id/257/200/"},
-    { username: "juju", profilePic: "", photo: "https://picsum.photos/id/237/200/"},
-    { username: "eva", profilePic: "", photo: "https://picsum.photos/id/257/200/"},
-    { username: "juju", profilePic: "", photo: "https://picsum.photos/id/237/200/"},
-    { username: "eva", profilePic: "", photo: "https://picsum.photos/id/257/200/"},
-  ]);
+  // const [feed, setFeed] = useState([
+  //   { username: "juju", profilePic: "", photo: "https://picsum.photos/id/237/200/"},
+  //   { username: "eva", profilePic: "", photo: "https://picsum.photos/id/257/200/"},
+  //   { username: "juju", profilePic: "", photo: "https://picsum.photos/id/237/200/"},
+  //   { username: "eva", profilePic: "", photo: "https://picsum.photos/id/257/200/"},
+  //   { username: "juju", profilePic: "", photo: "https://picsum.photos/id/237/200/"},
+  //   { username: "eva", profilePic: "", photo: "https://picsum.photos/id/257/200/"},
+  // ]);
+  const [feed, setFeed] = useState([]);
+  
 
   return (
     <div>
