@@ -1,4 +1,5 @@
-import { signUpAPI, loginAPI, deleteUserAPI, uploadToS3API, updateProfilePicAPI, updateUserBioAPI, getLoggedInUserAPI } from "./users-api";
+import { showFollowsService } from "../followers/followers-service";
+import { signUpAPI, loginAPI, getAllUsersAPI, deleteUserAPI, uploadToS3API, updateProfilePicAPI, updateUserBioAPI, getLoggedInUserAPI } from "./users-api";
 
 export async function signUpService(userData) {
   const data = await signUpAPI(userData);
@@ -10,6 +11,27 @@ export async function loginService(credentials) {
   const data = await loginAPI(credentials);
   localStorage.setItem("token", data.data.token);
   return getUser();
+}
+
+export async function getSuggestedUsersService() {
+  const users = await getAllUsersAPI();
+  const following = await showFollowsService(getUser().username);
+
+  const alreadyFollowing = following.following?.map(user => user.recipient_id);
+  // console.log(alreadyFollowing);
+
+  const unshuffled = users.filter(user => {
+    if (!alreadyFollowing.includes(user.id) && user.id !== getUser().id) {
+      return user;
+    }
+  });
+
+  const suggested = unshuffled
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+
+  return suggested.slice(0, 3);
 }
 
 export async function logOutService() {

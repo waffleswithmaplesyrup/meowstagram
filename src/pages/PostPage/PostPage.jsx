@@ -19,7 +19,6 @@ export default function PostPage () {
   const [comments, setComments] = useState([]);
 
   const yourPost = username === getUser().username;
-  // console.log("is this your post?", yourPost);
 
 
   useEffect(() => {
@@ -38,17 +37,11 @@ export default function PostPage () {
   }, [username, postID]);
 
   const date = new Date(post.date_posted);
-  // console.log(date);
 
   const filterAfterDelete = (commentDeleted) => {
     setComments(comments.filter(comment => comment.id !== commentDeleted));
   };
 
-  if (likes.filter(like => like.sender_id === getUser().id).length > 0) {
-    console.log("you have liked this post");
-  } else {
-    console.log("you have not liked this post");
-  }
 
   return (
     // <div>
@@ -126,7 +119,7 @@ function LikeButton({ likes, postID }) {
   
   const handleLike = async () => {
     const newLike = await likePostService(postID);
-    console.log(newLike);
+    // console.log(newLike);
     setliked(true);
   };
   console.log("liked:", liked);

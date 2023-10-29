@@ -9,6 +9,7 @@ export default function ProfilePage () {
 
   const [user, setUser] = useState([]);
   const [posts, setPosts] = useState([]);
+
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   

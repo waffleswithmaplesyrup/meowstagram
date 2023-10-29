@@ -75,7 +75,7 @@ async function login(req, res) {
 
 async function readAll(req, res) {
   try {
-    const query = `SELECT * FROM users;`;
+    const query = `SELECT id, username, profile_pic FROM users WHERE permissions = 'ok';`;
     const users = await pool.query(query);
     res.json(users.rows);
     debug("fetch all users successfully");

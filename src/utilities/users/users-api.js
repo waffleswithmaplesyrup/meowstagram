@@ -10,6 +10,10 @@ export function loginAPI(credentials) {
   return sendRequest(`${BASE_URL}/login`, "POST", credentials);
 }
 
+export function getAllUsersAPI() {
+  return sendRequest(`${BASE_URL}/readAll`);
+}
+
 export async function deleteUserAPI(userID) {
   return sendRequest(`${BASE_URL}/${userID}`, "DELETE");
 }
