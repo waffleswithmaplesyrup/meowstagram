@@ -15,3 +15,6 @@ export function showFollowsAPI(username) {
   return sendRequest(`${BASE_URL}/${username}`);
 }
 
+export function showFeedAPI(username) {
+  return sendRequest(`${BASE_URL}/${username}/feed`);
+}

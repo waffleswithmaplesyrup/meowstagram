@@ -90,10 +90,31 @@ async function showfollows(req, res) {
   }
 }
 
+async function showFeed(req, res) {
+  try {
+    const { username } = req.params;
+
+    const senderData = await pool.query("SELECT id FROM users WHERE username = $1;", [username]);
+    const senderID = senderData.rows[0].id;
+
+    debug("senderID", senderID);
+
+    const queryFollowing = `SELECT recipient_id, username, profile_pic, posts.id, photo, caption, date_posted, status FROM followers LEFT JOIN users ON users.id = recipient_id LEFT JOIN posts ON posts.user_id = followers.recipient_id WHERE follower_id = $1;`;
+    const dataFollowing = await pool.query(queryFollowing, [senderID]);
+    const following = dataFollowing.rows;
+
+    // debug(following);
+    sendResponse(res, 200, { following });
+    debug("fetch feed successfully");
+  } catch (err) {
+    sendResponse(res, 500, null, "Error getting feed posts");
+  }
+}
 
 
 module.exports = {
   followUser,
   unfollowUser,
-  showfollows
+  showfollows,
+  showFeed
 };

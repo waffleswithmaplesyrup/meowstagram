@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import PostAuthor from "../PostAuthor/PostAuthor";
 import PostInteractions from "../PostInteractions/PostInteractions";
+import { showFeedService } from "../../utilities/followers/followers-service";
+import { getUser } from "../../utilities/users/users-service";
 
 
 export default function Feed () {
@@ -15,7 +17,14 @@ export default function Feed () {
   //   { username: "eva", profilePic: "", photo: "https://picsum.photos/id/257/200/"},
   // ]);
   const [feed, setFeed] = useState([]);
-  
+
+  useEffect(() => {
+    const fetchFeed = async () => {
+      const data = await showFeedService(getUser().username); 
+      setFeed(data);
+    };
+    fetchFeed();
+  }, []);
 
   return (
     <div>
@@ -27,14 +36,24 @@ export default function Feed () {
 }
 
 function FeedCard({ post }) {
+  console.log(post);
 
   return (
     <div>
-      <img src={post.photo} alt='feed pic' />
-      <PostInteractions />
-      <div>number of likes</div>
-      <PostAuthor post={post} />
-      <Link>View Comments</Link>
+
+      { 
+        post.id ?
+        <div>
+          <img src={post.photo} alt='feed pic' className="post-image"/>
+          <PostInteractions />
+          <div>number of likes</div>
+          <PostAuthor post={post} />
+          <Link>View Comments</Link>
+        </div> 
+        :
+        ""
+      }
+      
     </div>
   );
 }
