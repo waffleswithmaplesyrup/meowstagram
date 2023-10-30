@@ -29,10 +29,10 @@ async function signup(req, res) {
     let status = 500;
     let message = "Internal Server Error";
 
-    if (err.code === 11000 && err.keyValue.username) {
+    if (err.code === '23505' && err.constraint === 'users_username_key') {
       status = 409;
       message = "Username already exists.";
-    } else if (err.code === 11000 && err.keyValue.email) {
+    } else if (err.code === '23505' && err.constraint === 'users_email_key') {
       status = 409;
       message = "Email already exists.";
     }
@@ -44,14 +44,12 @@ async function signup(req, res) {
 async function login(req, res) {
   debug("login user body: %o", req.body);
   try {
-    // const user = await User.findOne({ username: req.body.username });
-
     const query = "SELECT * FROM users WHERE email = $1;";
     const data = await pool.query(query, [req.body.email]);
     const user = data.rows[0];
     debug("user", user);
 
-    if (user === null) throw new Error("User does not exist.");
+    if (user === undefined) throw new Error("User does not exist.");
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) throw new Error("Incorrect password!");
     const token = createJWT(user);

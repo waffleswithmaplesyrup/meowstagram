@@ -1,100 +1,110 @@
-import { Component } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import ReactLoading from "react-loading";
+
 import { signUpService } from "../../utilities/users/users-service";
 
+//* sweet alert
+import Swal from 'sweetalert2';
+import { swalBasicSettings } from "../../utilities/posts/posts-service";
 
-export default class SignUpForm extends Component {
+export default function LoginForm({ updateUser }) {
+  const navigate = useNavigate();
 
-  state = {
+  const [status, setStatus] = useState(null);
+
+  const [credentials, setCredentials] = useState({
     username: '',
     email: '',
     password: '',
-    confirm: '',
-    error: ''
-  };
+    // confirm: ''
+  });
 
-  handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-      error: ''
+  const [error, setError] = useState('');
+
+  const handleChange = (event) => {
+    setCredentials({
+      ...credentials,
+      [event.target.name]: event.target.value
     });
+    setError("");
   };
 
-  handleSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setStatus("loading");
 
     try {
+      const user = await signUpService(credentials);
+      console.log(user);
+
+      updateUser(user);
+
+      Swal.fire(swalBasicSettings("Sign up successfully!", "success"))
       
-      const formData = {...this.state};
-      delete formData.error;
-      delete formData.confirm;
-
-      const user = await signUpService(formData);
-      // Baby step!
-      // console.log(user);
-
-      this.props.updateUser(user);
-
-      window.location = "/";
-
-    } catch {
-      this.setState({error: "Sign Up Failed - Try Again"});
+      navigate("/");
+      
+    } catch (err) {
+      if (err.message === "Unexpected end of JSON input") {
+        Swal.fire({
+          ...swalBasicSettings("Internal Server Error", "error"),
+          text: "Please try again later.",
+        });
+      } else {
+        Swal.fire({
+          ...swalBasicSettings("Error", "error"),
+          text: err.message,
+          confirmButtonText: "Try Again",
+        });
+      }
+      setStatus("error");
+    } finally {
+      setStatus("success");
     }
+    
   };
 
+  if (status === 'loading') {
+    return <div className="d-flex col justify-content-center align-items-center" style={{height: "100vh"}}>
+    <ReactLoading type="spin" color="#67E8B5" height={100} width={50} />
+    <p>Uploading...</p>
+    </div>
+  }
 
-  render() {
-    const disable = (this.state.password !== this.state.confirm) || (this.state.password.length < 3);
-    return (
-      <div className="container col-xl-10 col-xxl-8 px-4 py-5">
+  const disable = (credentials.password !== credentials.confirm) || (credentials.password.length < 3);
+
+  return (
+    <div className="container col-xl-10 col-xxl-8 px-4 py-5" style={{height: "100vh"}}>
     <div className="row align-items-center g-lg-5 py-5">
-      <div className="col-lg-7 text-center text-lg-start">
-        <img src="" alt="meowstagram" />
+      <div className="col-lg-7 text-center text-lg-start d-flex justify-content-center">
+        <img src="/assets/pic-auth.png" alt="meowstagram" className="pic-auth"/>
       </div>
       <div className="col-md-10 mx-auto col-lg-5">
-        <form onSubmit={this.handleSubmit} className="p-4 p-md-5 border rounded-3 bg-body-tertiary">
-          <p className="text-center pb-2">meowstagram</p>
+        <form onSubmit={handleSubmit} className="p-5 p-md-5 " style={{border: "2px solid #8D8585", borderRadius: "5px"}}>
+          <img src="/assets/logo-auth.png" alt="meowstagram" className="logo-auth" />
           <div className="form-floating mb-3">
-            <input value={this.state.username} onChange={this.handleChange} required name="username" type="text" className="form-control" id="floatingInput" placeholder="username" />
+            <input value={credentials.username} onChange={handleChange} required name="username" type="text" className="form-control" id="floatingInput" placeholder="username" />
             <label htmlFor="floatingInput">Username</label>
           </div>
           <div className="form-floating mb-3">
-            <input value={this.state.email} onChange={this.handleChange} required name="email" type="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
+            <input value={credentials.email} onChange={handleChange} required name="email" type="email" className="form-control" id="floatingInput" placeholder="name@example.com" />
             <label htmlFor="floatingInput">Email address</label>
           </div>
           <div className="form-floating mb-3">
-            <input value={this.state.password} onChange={this.handleChange} required name="password" type="password" className="form-control" id="floatingPassword" placeholder="Password" />
+            <input value={credentials.password} onChange={handleChange} required name="password" type="password" className="form-control" id="floatingPassword" placeholder="Password" />
             <label htmlFor="floatingPassword">Password</label>
           </div>
           <div className="form-floating mb-3">
-            <input value={this.state.confirm} onChange={this.handleChange} required name="confirm" type="password" className="form-control" id="floatingPassword" placeholder="Confirm Password" />
+            <input value={credentials.confirm} onChange={handleChange} required name="confirm" type="password" className="form-control" id="floatingPassword" placeholder="Confirm Password" />
             <label htmlFor="floatingPassword">Confirm Password</label>
           </div>
-          <button className="w-100 btn btn-lg btn-primary" type="submit">SIGN UP</button>
-          <p className="error-message">&nbsp;{this.state.error}</p>
+          <button className="w-100 form-control default-button" type="submit" disabled={disable}>SIGN UP</button>
+          <p className="error-message">&nbsp;{error}</p>
           <hr className="my-4" />
-          <small className="text-body-secondary">Already have an account? <Link to='/login'>Log In</Link></small>
+          <small className="text-body-secondary">Already have an account? <Link to='/login' className="default-link">Log In</Link></small>
         </form>
       </div>
     </div>
   </div>
-    );
-  }
+  );
 }
-
-
-
-
-{/* <div>
-        <div className="form-container">
-          <form autoComplete="off" onSubmit={this.handleSubmit}>
-            <input type="text" name="username" value={this.state.name} onChange={this.handleChange} required placeholder="username"/>
-            <input type="email" name="email" value={this.state.email} onChange={this.handleChange} required placeholder="email"/>
-            <input type="password" name="password" value={this.state.password} onChange={this.handleChange} required placeholder="password"/>
-            <input type="password" name="confirm" value={this.state.confirm} onChange={this.handleChange} required placeholder="confirm password"/>
-            <button type="submit" disabled={disable}>SIGN UP</button>
-          </form>
-        </div>
-        <p className="error-message">&nbsp;{this.state.error}</p>
-        <p>Already have an account? <Link to='/login'>Log In</Link></p>
-      </div> */}

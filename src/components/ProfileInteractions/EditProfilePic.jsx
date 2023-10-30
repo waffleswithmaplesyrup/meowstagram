@@ -1,24 +1,19 @@
-import debug from "debug";
-
 import { useState } from "react";
-import { createNewPostService, uploadToS3Service } from "../../utilities/posts/posts-service";
-import { getUser } from "../../utilities/users/users-service";
-import { useNavigate } from "react-router-dom";
-
-const log = debug("meowstagram:src:pages:create");
-
 import ReactLoading from "react-loading";
+
+import { getLoggedInUserService, updateProfilePicService, uploadToS3Service } from "../../utilities/users/users-service";
+
+//* font awesome
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as solid from '@fortawesome/free-solid-svg-icons';
 
 //* sweet alert
 import Swal from 'sweetalert2';
 import { swalBasicSettings } from "../../utilities/posts/posts-service";
 
-export default function CreatePage () {
+export default function EditProfilePic() {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [caption, setCaption] = useState("");
   const [status, setStatus] = useState(null);
-  const navigate = useNavigate();
-
 
   const [imageFiles, setImageFiles] = useState({
     images: [],
@@ -27,7 +22,7 @@ export default function CreatePage () {
   });
 
   const handleImgFileInput = (e) => {
-    console.log(e.target.files[0]);
+    
     setSelectedImage(e.target.files[0]);
 
     const imgFiles = Array.from(e.target.files);
@@ -39,13 +34,11 @@ export default function CreatePage () {
       updatedPreview.push(imgUrl);
       updatedFilenames.push(img.name);
     });
-    log("imges", imgFiles);
     setImageFiles({
       images: [...imageFiles.images, ...imgFiles],
       preview: [...imageFiles.preview, ...updatedPreview],
       filenames: [...imageFiles.filenames, ...updatedFilenames],
     });
-    log("Image uploaded");
   };
 
   const handleSubmit = async (event) => {
@@ -58,22 +51,23 @@ export default function CreatePage () {
     imageFiles.images.forEach((img) => {
       imgFormData.append("images", img);
     });
-    log("images appended to form", imgFormData);
+    
     try {
+      
       const imgURL = await uploadToS3Service(imgFormData);
-      const newPost = await createNewPostService(getUser().id, {
-        photo: imgURL,
-        caption: caption
+      
+      const newPic = await updateProfilePicService({
+        profile_pic: imgURL,
       });
-      console.log('new post created:', newPost);
-      // navigate(`/profile/${getUser().username}/${newPost.id}`);
+      console.log('new profile pic uploaded:', newPic);
+      await getLoggedInUserService();   //* fetch new getUser()
 
-      Swal.fire(swalBasicSettings("Uploaded new post successfully!", "success"))
+      Swal.fire(swalBasicSettings("Updated profile photo successfully!", "success"))
       .then((result) => {
         if (result.isConfirmed) {
           let timerInterval
           Swal.fire({
-            ...swalBasicSettings('Redirecting...'),
+            ...swalBasicSettings('Refreshing page...'),
             timer: 500,
             timerProgressBar: true,
             didOpen: () => {
@@ -89,12 +83,12 @@ export default function CreatePage () {
           }).then((result) => {
             if (result.dismiss === Swal.DismissReason.timer) {
               console.log('I was closed by the timer')
-              // window.location.reload();
-              navigate(`/profile/${getUser().username}/${newPost.id}`);
+              window.location.reload();
             }
           })
         }
       });
+  
     } catch (err) {
       if (err.message === "Unexpected end of JSON input") {
         Swal.fire({
@@ -117,50 +111,64 @@ export default function CreatePage () {
   if (status === 'loading') {
     return <div className="d-flex col justify-content-center align-items-center" style={{height: "100vh"}}>
     <ReactLoading type="spin" color="#67E8B5" height={100} width={50} />
-    <p>Uploading...</p>
+    <p>Loading...</p>
     </div>
   }
 
-  return (
-    <div className="w-100 text-center py-5">
-      <p>Create New Post</p>
-      <hr />
-      <form onSubmit={handleSubmit} className="py-5">
-      <div>
-      {selectedImage && (
-        <div>
-          <img
-            alt="not found"
-            width={"250px"}
-            src={URL.createObjectURL(selectedImage)}
-          />
-          <br />
-          <div className="d-flex justify-content-center align-items-center">
-      <div className="file-upload-wrapper" style={{width: "250px"}}>
-      <button className="form-control" onClick={() => setSelectedImage(null)}>Remove</button>
-    </div>
-    </div>
-        </div>
-      )}
+  const disable = selectedImage === null;
 
-      <br />
-      
-      <div className="d-flex justify-content-center align-items-center">
-      <div className="file-upload-wrapper" style={{width: "22rem"}}>
-        <input onChange={handleImgFileInput} type="file" name="photo" id="input-file-now" className="file-upload form-control" />
+  return (
+    <>
+    <FontAwesomeIcon icon={solid.faPenToSquare} style={{color: "#67E8B5"}} className="delete" data-bs-toggle="modal" 
+    data-bs-target={`#idprofilePic`}/>
+
+    <div className="modal" id={`idprofilePic`} >
+    <div className="d-flex align-items-center" style={{height: "100vh"}}>
+      <div className="modal-dialog" >
+        <div className="modal-content">
+
+          <div className="modal-header">
+            <h4 className="modal-title">Upload New Profile Pic</h4>
+            <button type="button" className="btn-close" data-bs-dismiss="modal"
+            onClick={() => setSelectedImage(null)}></button>
+          </div>
+
+          <div className="modal-body p-5">
+            <div>
+            {selectedImage && (
+              <div className="text-center">
+                <img
+                  alt="not found"
+                  width={"250px"}
+                  src={URL.createObjectURL(selectedImage)}
+                />
+                <br />
+                <div className="d-flex justify-content-center align-items-center">
+            <div className="file-upload-wrapper" style={{width: "250px"}}>
+            <button className="form-control" onClick={() => setSelectedImage(null)}>Remove</button>
+          </div>
+          </div>
+              </div>
+            )}
+
+            <br />
+            
+            <div className="d-flex justify-content-center align-items-center">
+            <div className="file-upload-wrapper" style={{width: "22rem"}}>
+              <input onChange={handleImgFileInput} type="file" name="photo" id="input-file-now" className="file-upload form-control" />
+            </div>
+          </div>
+          </div>
+
+          </div>
+
+          <div className="modal-footer">
+            <button disabled={disable} type="button" className="form-control default-button" style={{width: "100px"}} data-bs-dismiss="modal" onClick={handleSubmit}>Upload</button>
+          </div>
+        </div>
       </div>
     </div>
     </div>
-    <section className="w-100 p-4 d-flex justify-content-center pb-2">
-        <div className="form-outline form-floating mb-3" style={{width: "22rem", height: "10rem"}}>
-          <textarea onChange={(event) => setCaption(event.target.value)} 
-          value={caption} name="caption" placeholder="Write a caption" 
-          className="form-control h-100" id="floatingInput" rows="4"></textarea>
-          <label htmlFor="floatingInput">Write a caption</label>
-        </div>
-      </section>
-        <button>Post</button>
-      </form>
-    </div>
+    </>
   );
 }

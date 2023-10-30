@@ -38,3 +38,15 @@ export async function editPostService(postID, newCaption) {
 export async function deleteOnePostService(postID) {
   await deleteOnePostAPI(postID);
 }
+
+export function swalBasicSettings(title, icon) {
+  const settings = {
+    title: title,
+    icon: icon,
+    background: "#6B6B6B",
+    color: "white",
+    confirmButtonColor: "#E50914",
+    cancelButtonColor: "#000000",
+  };
+  return settings;
+}

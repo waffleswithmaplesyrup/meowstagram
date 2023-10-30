@@ -72,22 +72,47 @@ async function deleteFromS3(req, res, next) {
     res.status(404).send("Post not found");
     return;
   }
-  const s3ObjectID = postToDel.rows[0].photo.split('/')[3];
-  debug("s3ObjectID virtual:", s3ObjectID);
+  // const s3ObjectID = postToDel.rows[0].photo.split('/')[3];
+  // debug("s3ObjectID virtual:", s3ObjectID);
 
-  const params = {
-    Bucket: AWS_BUCKET_NAME,
-    Key: s3ObjectID,
-  };
+  // const params = {
+  //   Bucket: AWS_BUCKET_NAME,
+  //   Key: s3ObjectID,
+  // };
 
-  try {
-    await s3.deleteObject(params).promise();
-    debug("successfully deleted s3 object");
-  } catch (err) {
-    console.error(err);
-    debug("error deleting from s3: %o", err);
-    return res.status(500).json({ err, message: "Error deleting image" });
+  // try {
+  //   await s3.deleteObject(params).promise();
+  //   debug("successfully deleted s3 object");
+  // } catch (err) {
+  //   console.error(err);
+  //   debug("error deleting from s3: %o", err);
+  //   return res.status(500).json({ err, message: "Error deleting image" });
+  // }
+
+  const picToDel = postToDel.rows[0].photo;
+  debug("pic to delete", picToDel);
+
+  if (picToDel) {
+    const s3ObjectID = picToDel.split('/')[3];
+    debug("s3ObjectID virtual:", s3ObjectID);
+  
+    if (s3ObjectID) {
+      const params = {
+        Bucket: AWS_BUCKET_NAME,
+        Key: s3ObjectID,
+      };
+    
+      try {
+        await s3.deleteObject(params).promise();
+        debug("successfully deleted s3 object");
+      } catch (err) {
+        console.error(err);
+        debug("error deleting from s3: %o", err);
+        return res.status(500).json({ err, message: "Error deleting image" });
+      }
+    }
   }
+
   return next();
 }
 
@@ -103,7 +128,7 @@ async function deleteProfilePicFromS3(req, res, next) {
   debug("pic to delete", picToDel);
 
   if (picToDel) {
-    const s3ObjectID = postToDel.rows[0].profile_pic.split('/')[3];
+    const s3ObjectID = picToDel.split('/')[3];
     debug("s3ObjectID virtual:", s3ObjectID);
   
     if (s3ObjectID) {

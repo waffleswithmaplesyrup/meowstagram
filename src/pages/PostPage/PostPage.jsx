@@ -1,73 +1,83 @@
-import PostAuthor from "../../components/PostAuthor/PostAuthor";
-import PostInteractions from "../../components/PostInteractions/PostInteractions";
-import Comments from "../../components/Comments/Comments";
-
-import Debug from "debug";
-import { createNewCommentService, deleteCommentService, getAllCommentsService } from "../../utilities/comments/comments-service";
-
-import { likePostService, showAllLikesService, unlikePostService } from "../../utilities/likes/likes-service";
-
-import { useParams, useNavigate } from "react-router-dom";
+//* react
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { deleteOnePostService, editPostService, viewOnePostService } from "../../utilities/posts/posts-service";
+import ReactLoading from "react-loading";
+
+//* utils
+import { viewOnePostService } from "../../utilities/posts/posts-service";
 import { getUser } from "../../utilities/users/users-service";
+
+//* components
+import LikeButton from "../../components/PostInteractions/LikeButton";
+import EditPost from "../../components/Post/EditPost";
+import DeletePost from "../../components/Post/DeletePost";
+import CommentSection from "../../components/CommentSection/CommentSection";
+import CreateNewComment from "../../components/CommentSection/CreateNewComment";
+
+//* sweet alert
+import Swal from 'sweetalert2';
+import { swalBasicSettings } from "../../utilities/posts/posts-service";
+
 
 export default function PostPage () {
   const { username, postID } = useParams();
+  const [loading, setLoading] = useState(true);
+
   const [post, setPost] = useState([]);
-  const [likes, setLikes] = useState([]);
-  const [comments, setComments] = useState([]);
-
+  
   const yourPost = username === getUser().username;
-
 
   useEffect(() => {
     const fetchPost = async () => {
-      const data = await viewOnePostService(username, postID);
-      // console.log(data);
-      setPost(data);
-      const commentsData = await getAllCommentsService(postID);
-      // console.log(commentsData);
-      setComments(commentsData);
-      const likesData = await showAllLikesService(postID);
-      // console.log("likes:", likesData);
-      setLikes(likesData);
+      try {
+        const data = await viewOnePostService(username, postID);
+        setPost(data);
+      } catch (err) {
+        if (err.message === "Unexpected end of JSON input") {
+          Swal.fire({
+            ...swalBasicSettings("Internal Server Error", "error"),
+            text: "Please try again later.",
+          });
+        } else {
+          Swal.fire({
+            ...swalBasicSettings("Error", "error"),
+            text: err.message,
+            confirmButtonText: "Try Again",
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPost();
   }, [username, postID]);
 
   const date = new Date(post.date_posted);
 
-  const filterAfterDelete = (commentDeleted) => {
-    setComments(comments.filter(comment => comment.id !== commentDeleted));
-  };
-
+  if (loading) {
+    return <div className="d-flex col justify-content-center align-items-center" style={{height: "100vh"}}>
+    <ReactLoading type="spin" color="#67E8B5" height={100} width={50} />
+    <p>Loading...</p>
+    </div>
+  }
 
   return (
-    // <div>
-    //   <div>
-    //     <ImageCarousel />
-    //     <PostInteractions />
-    //     <p>date</p>
-    //   </div>
-
-    //   <div>
-    //     <PostAuthor />
-    //     <p>post caption</p>
-    //     <Comments />
-    //     <PostComment />
-    //   </div>
-    // </div>
-    
-    <div> 
+    <div className="d-xxl-flex col my-5 py-5 justify-content-center" > 
       {
-        post.length === 0 ? "" : (
-          <div>
-            <img className="post-image" src={post.photo} alt="post image" />
-            <p>{post.caption}</p>
+        post.length === 0 ? "no post found" : (
+          <>
+            <div className="m-5" style={{width: "500px"}} >
+              <img className="post-image" src={post.photo} alt="post image" />
+              <LikeButton postID={postID} />
+              <div className="w-100">
+                <p className="text-end">{date.toDateString()}</p>
+              </div>
+            </div>
 
+            <div className="m-5" style={{width: "500px"}}>
             <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
-            <p>{post.username}</p>
+            <p className="username">{post.username}</p>
+            <p>{post.caption}</p>
             {
               yourPost && (
                 <div>
@@ -76,254 +86,17 @@ export default function PostPage () {
                 </div>
               )
             }
-            <LikeButton likes={likes} postID={postID} />
-            <div>
-              <p>{likes.length} like{likes.length === 1 ? "" : "s"}</p>
-              <p>{date.toDateString()}</p>
-            </div>
-            <div>
-              {
-                comments.length === 0 ? <p>Be the first to comment</p> :
-                comments?.map(comment => <div key={comment.id}>
-                    <img src={comment.profile_pic} alt="profile pic" className="profile-pic-comment"/>
-                    <p>{comment.username}</p>
-                    <p>{comment.content}</p>
-                    {
-                      comment.sender_id === getUser().id && (
-                        <DeleteComment comment={comment} filterAfterDelete={filterAfterDelete} />
-                      )
-                    }
-                  </div>
-                  )
-              }
-            </div>
+            <hr />
+            <CommentSection postID={postID}/>
+            <hr />
             <CreateNewComment username={username} postID={postID}/>
-          </div>
+            </div>
+          </>
         )
       }
       
     </div>
 
 
-  );
-}
-
-function LikeButton({ likes, postID }) {
-  const [liked, setliked] = useState(false);
-
-  useEffect(() => {
-    if (likes.filter(like => like.sender_id === getUser().id).length > 0) {
-      setliked(true);
-    }
-  }, [likes]);
-  
-  const handleLike = async () => {
-    const newLike = await likePostService(postID);
-    // console.log(newLike);
-    setliked(true);
-  };
-  console.log("liked:", liked);
-
-  const handleUnlike = async() => {
-    await unlikePostService(postID);
-    setliked(false);
-  };
-
-  return (
-    <div>
-    { liked ? 
-      <button onClick={handleUnlike}>unlike</button> : 
-      <button onClick={handleLike}>like</button>
-    }
-    </div>
-  );
-}
-
-function ImageCarousel () {
-
-  return (
-    <div>
-      images
-    </div>
-  );
-}
-
-
-
-const debug = Debug("meowstagram:EditPost");
-
-function EditPost({ post }) {
-  const [caption, setCaption] = useState(post.caption);
-  // console.log(caption);
-
-  const updateCaption = async (event) => {
-    event.preventDefault();
-
-    try {
-
-      const data = await editPostService(post.id, { caption });
-      debug(data);
-      window.location = `/profile/${post.username}/${post.id}`;
-    } catch (err) {
-      console.error(err.message);
-    }
-
-  };
-
-  return (
-    <>
-    <button type="button" className="btn btn-warning" data-bs-toggle="modal" data-bs-target={`#id${post.id}`}>
-      Edit
-    </button>
-
-    <div className="modal" id={`id${post.id}`}>
-      <div className="modal-dialog">
-        <div className="modal-content">
-
-          <div className="modal-header">
-            <h4 className="modal-title">Edit Caption</h4>
-            <button type="button" className="btn-close" data-bs-dismiss="modal"
-            onClick={() => setCaption(post.caption)}></button>
-          </div>
-
-          <div className="modal-body">
-            <input type="text" className="form-control" 
-            value={caption} onChange={event => setCaption(event.target.value)}/>
-          </div>
-
-          <div className="modal-footer">
-            <button type="button" className="btn btn-warning" data-bs-dismiss="modal" onClick={updateCaption}>Edit</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    </>
-  );
-}
-
-function DeletePost({ post }) {
-
-  const handleDelete = async () => {
-    console.log("delete post id:", post.id);
-    
-
-
-    // const prompt = await Swal.fire({
-    //   ...swalBasicSettings("Proceed to delete?", "warning"),
-    //   text: "Your favourite outfit containing this apparel will also be deleted.",
-    //   showCancelButton: true,
-    //   confirmButtonText: "DELETE",
-    //   cancelButtonText: "CANCEL",
-    // });
-
-    // if (prompt.isConfirmed) {
-      try {
-        await deleteOnePostService(post.id);
-        
-        window.location = `/profile/${post.username}`;
-
-        // Swal.fire(swalBasicSettings("Deleted!", "success"));
-      } catch (err) {
-        console.error(err);
-        // Swal.fire({
-        //   ...swalBasicSettings("Error", "error"),
-        //   text: "Unable to delete. Please try again!",
-        // });
-      }
-    // }
-
-  };
-
-  return (
-    <button
-    onClick={handleDelete} 
-    type="button" className="btn btn-danger">Delete</button>
-  );
-}
-
-function DeleteComment({ comment, filterAfterDelete }) {
-
-  const handleDelete = async () => {
-    console.log("delete comment id:", comment.id);
-    
-
-
-    // const prompt = await Swal.fire({
-    //   ...swalBasicSettings("Proceed to delete?", "warning"),
-    //   text: "Your favourite outfit containing this apparel will also be deleted.",
-    //   showCancelButton: true,
-    //   confirmButtonText: "DELETE",
-    //   cancelButtonText: "CANCEL",
-    // });
-
-    // if (prompt.isConfirmed) {
-      try {
-        await deleteCommentService(comment.id);
-        
-        // window.location = `/profile/${post.username}`;
-        filterAfterDelete(comment.id);
-
-        // Swal.fire(swalBasicSettings("Deleted!", "success"));
-      } catch (err) {
-        console.error(err);
-        // Swal.fire({
-        //   ...swalBasicSettings("Error", "error"),
-        //   text: "Unable to delete. Please try again!",
-        // });
-      }
-    // }
-
-  };
-
-  return (
-    <button
-    onClick={handleDelete} 
-    type="button" className="btn btn-danger">Delete</button>
-  );
-}
-
-function CreateNewComment({ username, postID }) {
-  const [content, setContent] = useState('');
-  const [status, setStatus] = useState(null);
-
-  const navigate = useNavigate();
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const newComment = await createNewCommentService(postID, content);
-      console.log('new comment created:', newComment);
-      window.location = `/profile/${username}/${postID}`;
-    } catch (err) {
-      if (err.message === "Unexpected end of JSON input") {
-        // Swal.fire({
-        //   ...swalBasicSettings("Internal Server Error", "error"),
-        //   text: "Please try again later.",
-        // });
-      } else {
-        // Swal.fire({
-        //   ...swalBasicSettings("Error", "error"),
-        //   text: err.message,
-        //   confirmButtonText: "Try Again",
-        // });
-      }
-      setStatus("error");
-    } finally {
-      setStatus("success");
-    }
-  };
-
-  return (
-    <form className="w-100 p-4" onSubmit={handleSubmit}>
-      <div className="form-outline form-floating mb-3" style={{width: "22rem", height: "10rem"}}>
-        <textarea onChange={(event) => setContent(event.target.value)} 
-          value={content} name="caption" placeholder="Add a comment" 
-          className="form-control h-100" id="floatingInput" rows="4"></textarea>
-        <label htmlFor="floatingInput">Add a comment</label>
-      </div>
-      <button>Post</button>
-    </form>
   );
 }

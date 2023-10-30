@@ -1,26 +1,43 @@
 body {
   background-color: #FFF0F5;
+  font-size: 1rem;
+  color: #695F5F;
+}
+
+.pic-auth {
+  width: 80%;
+}
+
+.logo-auth {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.nav-logo {
+  width: 100%;
 }
 
 .profile-pic {
   height: 200px;
   width: 200px;
   border-radius: 50%;
+  border: 5px solid #695F5F;
   object-fit: cover;
 }
 
-
 .profile-pic-small {
-  height: 50px;
-  width: 50px;
+  height: 60px;
+  width: 60px;
   border-radius: 50%;
+  border: 2px solid #695F5F;
   object-fit: cover;
 }
 
 .profile-pic-comment {
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
+  border: 2px solid #695F5F;
   object-fit: cover;
 }
 
@@ -47,4 +64,85 @@ body {
   width: 500px;
   height: 500px;
   object-fit: cover;
+}
+
+.default-button {
+  font-size: 1rem;
+  background-color: #67E8B5;
+  color: #F4FFFB;
+}
+
+.default-button:hover {
+  background-color: #77EDBE;
+}
+
+.default-button:disabled {
+  background-color: #AAFBDB;
+}
+
+.default-button:focus {
+  color: #F4FFFB;
+  background-color: #67E8B5;
+}
+
+.default-link {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #67E8B5;
+  background-color: #FFF0F5;;
+  text-decoration: none;
+  border: none;
+}
+
+.default-link:hover {
+  color: #77EDBE;
+}
+
+.default-link:disabled{
+  color: #AAFBDB;
+}
+
+.interaction {
+  cursor: pointer;
+  height: 1.5rem;
+}
+
+.delete {
+  cursor: pointer;
+  height: 1rem;
+}
+
+p {
+  font-size: 1rem;
+  color: #695F5F;
+}
+
+.username {
+  font-weight: bold;
+  color: #2B0806;
+}
+
+.comment-card {
+  display: grid;
+  grid-template-columns: 0.7fr 1fr 2fr 1fr;
+  align-items: center;
+  margin: 10px;
+  padding-bottom: 10px;
+}
+
+.comment-card p {
+  margin: 0;
+}
+
+.modal-content {
+  background-color: #FFF0F5;
+}
+
+.modal-content h4 {
+  font-size: inherit;
+}
+
+.modal-content input {
+  background-color: #FFF0F5;
+  color: inherit;
 }

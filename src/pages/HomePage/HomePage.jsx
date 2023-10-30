@@ -8,17 +8,48 @@ import Suggested from "../../components/Suggested/Suggested";
 import Feed from "../../components/Feed/Feed";
 import Footer from "../../components/Footer/Footer";
 
+import ReactLoading from "react-loading";
+
+//* sweet alert
+import Swal from 'sweetalert2';
+import { swalBasicSettings } from "../../utilities/posts/posts-service";
+
 export default function HomePage () {
   const [following, setFollowing] = useState([]);
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchUserFollowList = async () => {
-      const data = await showFollowsService(getUser().username);
-      setFollowing(data.following);
+      try {
+        const data = await showFollowsService(getUser().username);
+        setFollowing(data.following);
+      } catch (err) {
+        if (err.message === "Unexpected end of JSON input") {
+          Swal.fire({
+            ...swalBasicSettings("Internal Server Error", "error"),
+            text: "Please try again later.",
+          });
+        } else {
+          Swal.fire({
+            ...swalBasicSettings("Error", "error"),
+            text: err.message,
+            confirmButtonText: "Try Again",
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
     };
     fetchUserFollowList();
   }, []);
 
+  if (loading) {
+    return <div className="d-flex col justify-content-center align-items-center" style={{height: "100vh"}}>
+    <ReactLoading type="spin" color="#67E8B5" height={100} width={50} />
+    <p>Loading...</p>
+    </div>
+  }
 
   return (
     <>

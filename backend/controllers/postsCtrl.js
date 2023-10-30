@@ -14,7 +14,7 @@ async function userPosts(req, res) {
     sendResponse(res, 200, { posts });
     debug("fetch all posts by user successfully");
   } catch (err) {
-    sendResponse(res, 500, null, "Error getting all posts");
+    sendResponse(res, 500, null, "Error loading page");
   }
 }
 
@@ -29,7 +29,7 @@ const viewPost = async (req, res) => {
     debug("fetch post successfully");
 
   } catch (err) {
-    sendResponse(res, 500, null, "Error getting post");
+    sendResponse(res, 500, null, "Error loading page");
   }
 };
 
@@ -72,7 +72,7 @@ async function createNewPost(req, res) {
       const errorMessage = Object.keys(errors)[0];
       return sendResponse(res, 400, null, errors[errorMessage]);
     }
-    sendResponse(res, 500, null, "Error saving post");
+    sendResponse(res, 500, null, "Error creating post");
   }
 }
 
@@ -99,14 +99,19 @@ async function del(req, res) {
     debug("see req.params: %o", req.params);
     const { postID } = req.params;
 
-    const query = `DELETE FROM posts WHERE posts.id = $1 RETURNING *;`;
-    await pool.query(query, [postID]);
-
-    const deleteComments = `DELETE FROM comments WHERE comments.post_id = $1 RETURNING *;`;
-    await pool.query(deleteComments, [postID]);
+    // debug('post to delete:', postID);
 
     const deleteLikes = `DELETE FROM likes WHERE likes.post_id = $1 RETURNING *;`;
-    await pool.query(deleteLikes, [postID]);
+    const likes = await pool.query(deleteLikes, [postID]);
+    // debug('likes', likes)
+
+    const deleteComments = `DELETE FROM comments WHERE comments.post_id = $1 RETURNING *;`;
+    const comments = await pool.query(deleteComments, [postID]);
+    // debug('comments', comments);
+
+    const query = `DELETE FROM posts WHERE id = $1 RETURNING *;`;
+    const post = await pool.query(query, [postID]);
+    // debug('post', post);
 
     debug('Post deleted successfully!');
     sendResponse(res, 200);
