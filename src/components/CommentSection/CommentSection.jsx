@@ -25,14 +25,17 @@ export default function CommentSection({ postID }) {
     <div>
       {
         comments.length === 0 ? <p>Be the first to comment</p> :
-        comments?.map(comment => <div key={comment.id} className="comment-card">
-          <Link to={`/profile/${comment.username}`}>
-            <img src={comment.profile_pic} alt="profile pic" className="profile-pic-small"/>
-          </Link>
-          <Link to={`/profile/${comment.username}`}>
-            <p className="username">{comment.username}</p>
-          </Link>
-          <p>{comment.content}</p>
+        comments?.map(comment => <div key={comment.id} className="d-flex justify-content-between mb-2">
+          <div className="d-flex">
+            <Link to={`/profile/${comment.username}`}>
+              <img src={comment.profile_pic} alt="profile pic" className="profile-pic-small"/>
+            </Link>
+            <Link className="mx-3" to={`/profile/${comment.username}`}>
+              <p className="username mb-1">{comment.username}</p>
+              <p>{comment.content}</p>
+            </Link>
+          </div>
+          {/* <p>{comment.content}</p> */}
           <div className="text-end">     
           {
             comment.sender_id === getUser().id && (

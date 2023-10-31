@@ -49,8 +49,8 @@ async function login(req, res) {
     const user = data.rows[0];
     debug("user", user);
 
-    if (user.permissions === "deactivated") throw new Error("User account was taken down for violating terms of use.");
     if (user === undefined) throw new Error("User does not exist.");
+    if (user.permissions === "deactivated") throw new Error("User account was taken down for violating terms of use.");
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) throw new Error("Incorrect password!");
     const token = createJWT(user);
@@ -65,6 +65,10 @@ async function login(req, res) {
       message = err.message;
     }
     if (err.message === "Incorrect password!") {
+      status = 401;
+      message = err.message;
+    }
+    if (err.message === "User account was taken down for violating terms of use.") {
       status = 401;
       message = err.message;
     }

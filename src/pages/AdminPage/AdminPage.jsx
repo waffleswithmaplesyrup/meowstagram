@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+
 import ReactLoading from "react-loading";
 
 //* sweet alert
 import Swal from 'sweetalert2';
 import { swalBasicSettings } from "../../utilities/posts/posts-service";
 
-import { getAllUsersAdminService, getUser, deactivateUserService } from "../../utilities/users/users-service";
+import { getAllUsersAdminService, getUser } from "../../utilities/users/users-service";
+import UserCard from "./UserCard";
 
 
 export default function AdminPage() {
@@ -52,7 +53,7 @@ export default function AdminPage() {
       {
       getUser().permissions === "admin" ?
       
-      <div className="w-100 text-center py-5">
+      <div className="text-center py-5 mx-auto" style={{width: "1000px"}}>
         <p className="username">View All Users</p>
         <div>
           <table className="table">
@@ -79,82 +80,3 @@ export default function AdminPage() {
   );
 }
 
-function UserCard({ user }) {
-  const [status, setStatus] = useState(null);
-  const [active, setActive] = useState(user.permissions !== 'deactivated');
-  const [permissions, setPermissions] = useState(user.permissions);
-
-  const handleDeactivate = async () => {
-    
-    setStatus("loading");
-    
-    try {
-      
-      await deactivateUserService(user.id, "deactivated");
-      setActive(false);
-      setPermissions("deactivated");
-     
-    } catch (err) {
-      if (err.message === "Unexpected end of JSON input") {
-        Swal.fire({
-          ...swalBasicSettings("Internal Server Error", "error"),
-          text: "Please try again later.",
-        });
-      } else {
-        Swal.fire({
-          ...swalBasicSettings("Error", "error"),
-          text: err.message,
-          confirmButtonText: "Try Again",
-        });
-      }
-      setStatus("error");
-    } finally {
-      setStatus("success");
-    }
-  };
-
-  const handleReset = async () => {
-    
-    setStatus("loading");
-    
-    try {
-      
-      await deactivateUserService(user.id, "ok");
-      setActive(true);
-      setPermissions('ok');
-     
-    } catch (err) {
-      if (err.message === "Unexpected end of JSON input") {
-        Swal.fire({
-          ...swalBasicSettings("Internal Server Error", "error"),
-          text: "Please try again later.",
-        });
-      } else {
-        Swal.fire({
-          ...swalBasicSettings("Error", "error"),
-          text: err.message,
-          confirmButtonText: "Try Again",
-        });
-      }
-      setStatus("error");
-    } finally {
-      setStatus("success");
-    }
-  };
-
-  return (
-    <tr>
-      <th scope="row"><Link to={`/profile/${user.username}`}><img className="profile-pic-comment" src={user.profile_pic} alt="profile pic"/></Link></th>
-      <th scope="row">{user.username}</th>
-      <td>{user.email}</td>
-      <td>{permissions}</td>
-      <td>
-        {
-          active ? <button onClick={handleDeactivate} className="form-control default-button m-auto" style={{width: "150px"}}>Deactivate</button>
-          :
-          <button onClick={handleReset} className="form-control default-button m-auto" style={{width: "150px"}}>Allow Access</button>
-        }
-      </td>
-    </tr>
-  );
-}

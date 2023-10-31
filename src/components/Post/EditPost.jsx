@@ -70,7 +70,7 @@ export default function EditPost({ post }) {
 
   return (
     <>
-      <FontAwesomeIcon icon={solid.faPenToSquare} style={{color: "#8D8585"}} className="delete" onClick={handleEdit}/>
+      <FontAwesomeIcon icon={solid.faPenToSquare} style={{color: "#8D8585"}} className="delete mx-2" onClick={handleEdit}/>
     </>
   );
 }

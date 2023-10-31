@@ -75,13 +75,16 @@ export default function PostPage () {
             </div>
 
             <div className="m-5" style={{width: "500px"}}>
-              <Link to={`/profile/${post.username}`}>
-                <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
-              </Link>
-              <Link to={`/profile/${post.username}`}>
-                <p className="username">{post.username}</p>
-              </Link>
-              <div className="d-flex justify-content-between">
+              <div className="d-flex align-items-center">
+                <Link to={`/profile/${post.username}`}>
+                  <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
+                </Link>
+                <Link className="mx-3" to={`/profile/${post.username}`}>
+                  <p className="username">{post.username}</p>
+                </Link>
+              </div>
+              
+              <div className="d-flex justify-content-between my-3">
                 <p>{post.caption}</p>
                 {
                   yourPost && (

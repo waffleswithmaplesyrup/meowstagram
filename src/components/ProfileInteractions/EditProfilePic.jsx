@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 
 import { getLoggedInUserService, updateProfilePicService, uploadToS3Service } from "../../utilities/users/users-service";
@@ -6,7 +7,6 @@ import { getLoggedInUserService, updateProfilePicService, uploadToS3Service } fr
 //* sweet alert
 import Swal from 'sweetalert2';
 import { swalBasicSettings } from "../../utilities/posts/posts-service";
-import { Link } from "react-router-dom";
 
 export default function EditProfilePic({ photo }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -118,7 +118,7 @@ export default function EditProfilePic({ photo }) {
     <>
     <Link data-bs-toggle="modal" data-bs-target={`#idprofilePic`} style={{position: "relative", zIndex: "1"}}>
       <img src={photo} alt="profile pic" className="profile-pic edit-text" style={{position: "relative", zIndex: "3"}}/>
-      <div className="profile-pic d-flex justify-content-center align-items-center username" style={{position: "absolute", top: "-85px", zIndex: "2"}}>Change Profile Photo</div>
+      <div className="profile-pic d-flex justify-content-center align-items-center username" style={{position: "absolute", top: "-85px", zIndex: "2", color: "black"}}>Change Profile Photo</div>
     </Link>
 
     <div className="modal" id={`idprofilePic`} >

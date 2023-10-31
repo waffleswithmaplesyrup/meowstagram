@@ -60,16 +60,21 @@ export default function FeedCard({ post }) {
             <LikeButton postID={post.id} />
           </div>
 
-          <div className="d-flex justify-content-start w-100 my-3" >
+          <div className="d-flex justify-content-between w-100 my-3" >
           
-            <Link to={`/profile/${post.username}`} style={{width: "80px"}} className="text-start">
+            <Link to={`/profile/${post.username}`} style={{width: "80px"}} className="text-start d-flex">
               <img src={post.profile_pic} alt="profile pic" className="profile-pic-small"/>
+              <div>
+                <p className="username  mx-3">{post.username}</p>
+                <p className="mx-3" style={{width: "350px"}} >{post.caption}</p>
+              </div>
+              
             </Link>
             <Link to={`/profile/${post.username}`} style={{width: "100px"}} className="text-start mx-2">
-              <p className="username">{post.username}</p>
+              
             </Link>
             <div>
-              <p className="mx-2 text-start" style={{width: "200px"}} >{post.caption}</p>
+              {/* <p className="mx-2 text-start" style={{width: "200px"}} >{post.caption}</p> */}
             </div>
             <div className="text-end" style={{width: "200px"}}>     
               <p>{duration}</p>

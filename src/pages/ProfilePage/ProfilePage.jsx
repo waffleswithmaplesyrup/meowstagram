@@ -75,3 +75,5 @@ export default function ProfilePage () {
     </div>
   );
 }
+
+// className="image-grid"

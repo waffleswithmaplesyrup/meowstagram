@@ -125,45 +125,42 @@ export default function CreatePage () {
 
   return (
     <div className="w-100 text-center py-5">
-      <p>Create New Post</p>
+      <p className="username">Create New Post</p>
       <hr />
-      <form className="py-5 m-auto" style={{width: "400px"}}>
-      <div>
-      {selectedImage && (
-        <div>
-          <img
-            alt="not found"
-            width={"250px"}
-            src={URL.createObjectURL(selectedImage)}
-          />
-          <br />
-          <div className="d-flex justify-content-center align-items-center">
-      <div className="file-upload-wrapper" style={{width: "250px"}}>
-      <button className="form-control" onClick={() => setSelectedImage(null)}>Remove</button>
-    </div>
-    </div>
-        </div>
-      )}
 
-      <br />
-      
-      <div className="d-flex justify-content-center align-items-center">
-      <div className="file-upload-wrapper" style={{width: "22rem"}}>
-        <input onChange={handleImgFileInput} type="file" name="photo" id="input-file-now" className="file-upload form-control" />
-      </div>
-    </div>
-    </div>
-    <section className="w-100 p-4 d-flex justify-content-center pb-2">
-        <div className="form-outline form-floating mb-3" style={{width: "22rem", height: "10rem"}}>
-          <textarea onChange={(event) => setCaption(event.target.value)} 
-          value={caption} name="caption" placeholder="Write a caption" 
-          className="form-control h-100" id="floatingInput" rows="4"></textarea>
-          <label htmlFor="floatingInput">Write a caption</label>
+      <form className="p-5 m-auto d-flex justify-content-center align-items-center" style={{width: "900px", height: "500px"}}>
+        <div>
+          {selectedImage && (
+            <div>
+              <img
+                alt="not found"
+                width="300px" height="300px" style={{objectFit: "cover"}}
+                src={URL.createObjectURL(selectedImage)}
+              />
+            </div>
+          )}
+
+          <br />
+        
+          <div className="d-flex justify-content-center align-items-center">
+            <div className="file-upload-wrapper" style={{width: "22rem"}}>
+              <input onChange={handleImgFileInput} type="file" name="photo" id="input-file-now" className="file-upload form-control" style={{fontSize: "inherit", color: "inherit"}} />
+            </div>
+          </div>
         </div>
-      </section>
-        <div className="modal-footer">
-          <button onClick={handleSubmit} disabled={disable} type="button" className="form-control default-button" style={{width: "100px", marginRight: "10px"}}>Post</button>
+        <section className=" p-4">
+          <div className="form-outline form-floating mb-3" style={{width: "22rem", height: "10rem"}}>
+            <textarea onChange={(event) => setCaption(event.target.value)} 
+            value={caption} name="caption" placeholder="Write a caption" 
+            className="form-control h-100" id="floatingInput" rows="4"></textarea>
+            <label htmlFor="floatingInput">Write a caption</label>
+          </div>
+          <div className="modal-footer">
+          <button onClick={handleSubmit} disabled={disable} type="button" className="form-control default-button" style={{width: "100px", marginRight: "-10px"}}>Post</button>
         </div>
+        </section>
+
+        
       </form>
     </div>
   );

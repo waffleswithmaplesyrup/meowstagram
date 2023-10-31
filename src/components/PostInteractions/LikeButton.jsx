@@ -41,7 +41,7 @@ export default function LikeButton({ postID }) {
   };
 
   return (
-    <div className="my-1">
+    <div className="my-1 d-flex">
     { liked ? 
       <FontAwesomeIcon onClick={handleUnlike} 
       icon={solid.faHeart} style={{color: "#ff3040"}} className="interaction"/>
@@ -49,7 +49,7 @@ export default function LikeButton({ postID }) {
       <FontAwesomeIcon onClick={handleLike} 
       icon={regular.faHeart} style={{color: "#2B0806"}} className="interaction"/>
     }
-      <p>{likesCount} like{likesCount === 1 ? "" : "s"}</p>
+      <p className="px-2">{likesCount} like{likesCount === 1 ? "" : "s"}</p>
 
     </div>
   );

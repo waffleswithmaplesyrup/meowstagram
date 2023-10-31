@@ -43,10 +43,10 @@ export function swalBasicSettings(title, icon) {
   const settings = {
     title: title,
     icon: icon,
-    background: "#6B6B6B",
-    color: "white",
-    confirmButtonColor: "#E50914",
-    cancelButtonColor: "#000000",
+    background: "#FFF0F5",
+    color: "inherit",
+    confirmButtonColor: "#67E8B5",
+    cancelButtonColor: "#695F5F",
   };
   return settings;
 }
