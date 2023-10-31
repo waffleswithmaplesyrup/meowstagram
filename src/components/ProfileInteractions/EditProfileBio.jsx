@@ -1,27 +1,78 @@
 import { useState } from "react";
+import ReactLoading from "react-loading";
 
 import { getLoggedInUserService, getUser, updateUserBioService } from "../../utilities/users/users-service";
 
-//* font awesome
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as solid from '@fortawesome/free-solid-svg-icons';
+//* sweet alert
+import Swal from 'sweetalert2';
+import { swalBasicSettings } from "../../utilities/posts/posts-service";
 
 export default function EditProfileBio() {
   const [bio, setBio] = useState(getUser().bio);
+  const [status, setStatus] = useState(null);
+
 
   const updateBio = async (event) => {
     event.preventDefault();
+    setStatus("loading");
 
     try {
 
       await updateUserBioService({ bio });
       await getLoggedInUserService();   //* fetch new getUser()
-      
-      window.location = `/profile/${getUser().username}/`;
+
+      Swal.fire(swalBasicSettings("Updated profile info successfully!", "success"))
+      .then((result) => {
+        if (result.isConfirmed) {
+          let timerInterval
+          Swal.fire({
+            ...swalBasicSettings('Refreshing page...'),
+            timer: 500,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading()
+              const b = Swal.getHtmlContainer().querySelector('b')
+              timerInterval = setInterval(() => {
+                b.textContent = Swal.getTimerLeft()
+              }, 100)
+            },
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+              window.location.reload();
+            }
+          })
+        }
+      });
+      // window.location = `/profile/${getUser().username}/`;
     } catch (err) {
-      console.error(err.message);
+      if (err.message === "Unexpected end of JSON input") {
+        Swal.fire({
+          ...swalBasicSettings("Internal Server Error", "error"),
+          text: "Please try again later.",
+        });
+      } else {
+        Swal.fire({
+          ...swalBasicSettings("Error", "error"),
+          text: err.message,
+          confirmButtonText: "Try Again",
+        });
+      }
+      setStatus("error");
+    } finally {
+      setStatus("success");
     }
   };
+
+  if (status === 'loading') {
+    return <div className="d-flex col justify-content-center align-items-center" style={{height: "100vh"}}>
+    <ReactLoading type="spin" color="#67E8B5" height={100} width={50} />
+    <p>Loading...</p>
+    </div>
+  }
 
   const disable = bio === getUser().bio;
   

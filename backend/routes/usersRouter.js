@@ -16,4 +16,6 @@ router.patch("/:id/updatePic", deleteProfilePicFromS3, usersCtrl.updateUserPic);
 router.get("/readAll/admin", usersCtrl.readAllAdmin);
 router.patch("/deactivate/admin/:userID", usersCtrl.deactivateUser);
 
+router.get("/search/:keyword", usersCtrl.searchUser);
+
 module.exports = router;

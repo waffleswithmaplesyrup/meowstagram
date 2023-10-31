@@ -41,3 +41,7 @@ export function updateUserBioAPI(userID, updatedBio) {
 export function getLoggedInUserAPI(userID) {
   return sendRequest(`${BASE_URL}/${userID}`);
 }
+
+export function searchUsersAPI(keyword) {
+  return sendRequest(`${BASE_URL}/search/${keyword}`);
+}

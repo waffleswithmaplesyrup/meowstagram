@@ -201,6 +201,21 @@ async function updateUserPic(req, res) {
   }
 }
 
+async function searchUser(req, res) {
+  try {
+
+    const { keyword } = req.params;
+    debug("searching for:", '%'+keyword+'%');
+    const query = `SELECT id, username, profile_pic, bio FROM users WHERE permissions = 'ok' AND username LIKE $1 OR email LIKE $1;`;
+    const data = await pool.query(query, ['%'+keyword+'%']);
+    const users = data.rows;
+    debug('Users found successfully!');
+    sendResponse(res, 200, { users });
+  } catch (err) {
+    sendResponse(res, 500, null, "Error finding users");
+  }
+}
+
 //* ===== Helper Functions ===== *//
 
 function createJWT(user) {
@@ -217,5 +232,6 @@ module.exports = {
   getOne, 
   updateUserBio,
   uploadImg,
-  updateUserPic
+  updateUserPic, 
+  searchUser
 };
