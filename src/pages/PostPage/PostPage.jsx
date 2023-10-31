@@ -1,5 +1,5 @@
 //* react
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 
@@ -75,21 +75,25 @@ export default function PostPage () {
             </div>
 
             <div className="m-5" style={{width: "500px"}}>
-            <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
-            <p className="username">{post.username}</p>
-            <p>{post.caption}</p>
-            {
-              yourPost && (
-                <div>
-                  <EditPost post={post} />
-                  <DeletePost post={post} />
-                </div>
-              )
-            }
-            <hr />
-            <CommentSection postID={postID}/>
-            <hr />
-            <CreateNewComment username={username} postID={postID}/>
+              <Link to={`/profile/${post.username}`}>
+              <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
+              </Link>
+              <Link to={`/profile/${post.username}`}>
+                <p className="username">{post.username}</p>
+              </Link>
+              <p>{post.caption}</p>
+              {
+                yourPost && (
+                  <div>
+                    <EditPost post={post} />
+                    <DeletePost post={post} />
+                  </div>
+                )
+              }
+              <hr />
+              <CommentSection postID={postID}/>
+              <hr />
+              <CreateNewComment username={username} postID={postID}/>
             </div>
           </>
         )

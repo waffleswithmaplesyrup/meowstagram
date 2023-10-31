@@ -1,5 +1,5 @@
 
-import { Link } from "react-router-dom";
+import FollowingCard from "./FollowingCard";
 
 export default function Following({ following }) {
   
@@ -10,15 +10,5 @@ export default function Following({ following }) {
         following?.map(user => <FollowingCard key={user.id} user={user}/>)
       }
     </div>
-  );
-}
-
-function FollowingCard({ user }) {
-
-  return (
-    <Link to={`/profile/${user.username}`}>
-      <img src={user.profile_pic} alt='friend' className="profile-pic-small"/>
-      <p>{user.username}</p>
-    </Link>
   );
 }

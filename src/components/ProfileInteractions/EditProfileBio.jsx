@@ -27,8 +27,8 @@ export default function EditProfileBio() {
   
   return (
     <>
-    <FontAwesomeIcon icon={solid.faPenToSquare} style={{color: "#67E8B5"}} className="delete" data-bs-toggle="modal" 
-    data-bs-target={`#idprofileBio`}/>
+    <button className="form-control default-button" data-bs-toggle="modal" 
+    data-bs-target={`#idprofileBio`} style={{width: "120px", fontWeight: "normal"}} >Edit Profile</button>
 
     <div className="modal" id={`idprofileBio`}>
     <div className="d-flex align-items-center" style={{height: "100vh"}}>

@@ -4,6 +4,7 @@ import { getAllCommentsService } from "../../utilities/comments/comments-service
 import { getUser } from "../../utilities/users/users-service";
 
 import DeleteButton from "./DeleteButton";
+import { Link } from "react-router-dom";
 
 export default function CommentSection({ postID }) {
   const [comments, setComments] = useState([]);
@@ -25,8 +26,12 @@ export default function CommentSection({ postID }) {
       {
         comments.length === 0 ? <p>Be the first to comment</p> :
         comments?.map(comment => <div key={comment.id} className="comment-card">
-          <img src={comment.profile_pic} alt="profile pic" className="profile-pic-small"/>
-          <p className="username">{comment.username}</p>
+          <Link to={`/profile/${comment.username}`}>
+            <img src={comment.profile_pic} alt="profile pic" className="profile-pic-small"/>
+          </Link>
+          <Link to={`/profile/${comment.username}`}>
+            <p className="username">{comment.username}</p>
+          </Link>
           <p>{comment.content}</p>
           <div className="text-end">     
           {

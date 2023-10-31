@@ -3,10 +3,11 @@ import { followUserService, showFollowsService, unfollowUserService } from "../.
 import { useParams } from "react-router-dom";
 import { getUser } from "../../utilities/users/users-service";
 
-export default function FollowButton() {
+export default function FollowButton({ followers, changeFollowerCount }) {
   const { username } = useParams();
-
+  // console.log(followers);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [count, setCount] = useState(followers);
 
   useEffect(() => {
     const fetchFollowing = async () => {
@@ -16,26 +17,30 @@ export default function FollowButton() {
     fetchFollowing();
   }, [username]);
 
-
   const handleUnfollow = async () => {
-    console.log("unfollow", username);
+    // console.log("unfollow", username);
     const unfollow = await unfollowUserService(username);
-    console.log(unfollow);
+    // console.log(unfollow);
     setIsFollowing(false);
+
+    changeFollowerCount("unfollow");
   };
 
   const handleFollow = async () => {
-    console.log("follow", username);
+    // console.log("follow", username);
     const follow = await followUserService(username);
-    console.log(follow);
+    // console.log(follow);
     setIsFollowing(true);
+
+    changeFollowerCount("follow");
+
   };
 
   return (
     <div>
       {
-        isFollowing ? <button onClick={handleUnfollow}>unfollow</button> : 
-        <button onClick={handleFollow}>follow</button>
+        isFollowing ? <button onClick={handleUnfollow} className="form-control default-button" style={{width: "100px", fontWeight: "normal"}}>following</button> : 
+        <button className="form-control default-button" style={{width: "100px", fontWeight: "normal"}} onClick={handleFollow}>follow</button>
       }
     </div>
   );

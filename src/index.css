@@ -68,6 +68,7 @@ body {
 
 .default-button {
   font-size: 1rem;
+  font-weight: bold;
   background-color: #67E8B5;
   color: #F4FFFB;
 }
@@ -117,6 +118,10 @@ p {
   color: #695F5F;
 }
 
+a {
+  text-decoration: none;
+}
+
 .username {
   font-weight: bold;
   color: #2B0806;
@@ -126,6 +131,7 @@ p {
   display: grid;
   grid-template-columns: 0.7fr 1fr 2fr 1fr;
   align-items: center;
+  justify-content: ;
   margin: 10px;
   padding-bottom: 10px;
 }
@@ -145,4 +151,28 @@ p {
 .modal-content input {
   background-color: #FFF0F5;
   color: inherit;
+}
+
+.suggested-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
+
+.profile-header {
+  padding: 30px;
+  width: 800px;
+  margin: auto;
+  height: 300px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+  
+}
+
+.profile-header text {
+  display: grid;
 }
