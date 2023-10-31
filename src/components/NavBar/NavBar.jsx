@@ -19,8 +19,8 @@ export default function NavBar ({ user, updateUser }) {
     </Link>
     <br />
     <div className="text-center">
-      <Link to={`/profile/${user.username}`}><img className="profile-pic" src={user.profile_pic} alt='profile pic'/></Link>
-      <p className="pt-3">Welcome, {user.username}!</p>
+      <Link to={`/profile/${user.username}`}><img className="profile-pic opacity-8" src={user.profile_pic} alt='profile pic'/></Link>
+      <p className="pt-3">Welcome, <span className="username">{user.username}</span>!</p>
     </div>
     
     <br />

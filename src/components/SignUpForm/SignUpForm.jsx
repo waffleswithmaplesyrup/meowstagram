@@ -67,7 +67,7 @@ export default function LoginForm({ updateUser }) {
   if (status === 'loading') {
     return <div className="d-flex col justify-content-center align-items-center" style={{height: "100vh"}}>
     <ReactLoading type="spin" color="#67E8B5" height={100} width={50} />
-    <p>Uploading...</p>
+    <p>Loading...</p>
     </div>
   }
 

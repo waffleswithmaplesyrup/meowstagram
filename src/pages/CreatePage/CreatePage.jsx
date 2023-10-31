@@ -121,11 +121,13 @@ export default function CreatePage () {
     </div>
   }
 
+  const disable = selectedImage === null;
+
   return (
     <div className="w-100 text-center py-5">
       <p>Create New Post</p>
       <hr />
-      <form onSubmit={handleSubmit} className="py-5">
+      <form className="py-5 m-auto" style={{width: "400px"}}>
       <div>
       {selectedImage && (
         <div>
@@ -159,7 +161,9 @@ export default function CreatePage () {
           <label htmlFor="floatingInput">Write a caption</label>
         </div>
       </section>
-        <button>Post</button>
+        <div className="modal-footer">
+          <button onClick={handleSubmit} disabled={disable} type="button" className="form-control default-button" style={{width: "100px", marginRight: "10px"}}>Post</button>
+        </div>
       </form>
     </div>
   );

@@ -3,15 +3,12 @@ import ReactLoading from "react-loading";
 
 import { getLoggedInUserService, updateProfilePicService, uploadToS3Service } from "../../utilities/users/users-service";
 
-//* font awesome
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as solid from '@fortawesome/free-solid-svg-icons';
-
 //* sweet alert
 import Swal from 'sweetalert2';
 import { swalBasicSettings } from "../../utilities/posts/posts-service";
+import { Link } from "react-router-dom";
 
-export default function EditProfilePic() {
+export default function EditProfilePic({ photo }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [status, setStatus] = useState(null);
 
@@ -119,8 +116,10 @@ export default function EditProfilePic() {
 
   return (
     <>
-    <FontAwesomeIcon icon={solid.faPenToSquare} style={{color: "#67E8B5"}} className="delete" data-bs-toggle="modal" 
-    data-bs-target={`#idprofilePic`}/>
+    <Link data-bs-toggle="modal" data-bs-target={`#idprofilePic`} style={{position: "relative", zIndex: "1"}}>
+      <img src={photo} alt="profile pic" className="profile-pic edit-text" style={{position: "relative", zIndex: "3"}}/>
+      <div className="profile-pic d-flex justify-content-center align-items-center username" style={{position: "absolute", top: "-85px", zIndex: "2"}}>Change Profile Photo</div>
+    </Link>
 
     <div className="modal" id={`idprofilePic`} >
     <div className="d-flex align-items-center" style={{height: "100vh"}}>
@@ -128,7 +127,7 @@ export default function EditProfilePic() {
         <div className="modal-content">
 
           <div className="modal-header">
-            <h4 className="modal-title">Upload New Profile Pic</h4>
+            <h4 className="modal-title">Change Profile Photo</h4>
             <button type="button" className="btn-close" data-bs-dismiss="modal"
             onClick={() => setSelectedImage(null)}></button>
           </div>

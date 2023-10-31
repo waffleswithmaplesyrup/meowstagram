@@ -49,6 +49,7 @@ async function login(req, res) {
     const user = data.rows[0];
     debug("user", user);
 
+    if (user.permissions === "deactivated") throw new Error("User account was taken down for violating terms of use.");
     if (user === undefined) throw new Error("User does not exist.");
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) throw new Error("Incorrect password!");
@@ -83,7 +84,38 @@ async function readAll(req, res) {
   }
 }
 
-const getOne = async (req, res) => {
+async function readAllAdmin(req, res) {
+  try {
+    const query = `SELECT * FROM users WHERE permissions != 'admin';`;
+    const users = await pool.query(query);
+    res.json(users.rows);
+    debug("fetch all users successfully");
+
+    sendResponse(res, 200);
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+async function deactivateUser(req, res) {
+  const { userID } = req.params;
+  const { permissions } = req.body;
+
+  try {
+    
+    debug("userID", userID);
+    debug("body", permissions);
+
+    const query = "UPDATE users SET permissions = $1 WHERE users.id = $2";
+    await pool.query(query, [permissions, userID]);
+
+    sendResponse(res, 200);
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
+async function getOne (req, res) {
   try {
     const { id } = req.params;
     // debug(id);
@@ -100,9 +132,9 @@ const getOne = async (req, res) => {
   } catch (err) {
     console.error(err.message);
   }
-};
+}
 
-async function deactivate(req, res) {
+async function del(req, res) {
   debug("delete user: %o", req.params);
   try {
     const { id } = req.params;
@@ -174,7 +206,9 @@ function createJWT(user) {
 module.exports = { 
   signup, 
   login, 
-  deactivate, 
+  del, 
+  readAllAdmin,
+  deactivateUser,
   readAll,
   getOne, 
   updateUserBio,

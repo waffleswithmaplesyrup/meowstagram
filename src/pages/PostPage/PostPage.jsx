@@ -68,28 +68,31 @@ export default function PostPage () {
           <>
             <div className="m-5" style={{width: "500px"}} >
               <img className="post-image" src={post.photo} alt="post image" />
-              <LikeButton postID={postID} />
-              <div className="w-100">
+              <div className="d-flex justify-content-between my-2">
+                <LikeButton postID={postID} />
                 <p className="text-end">{date.toDateString()}</p>
               </div>
             </div>
 
             <div className="m-5" style={{width: "500px"}}>
               <Link to={`/profile/${post.username}`}>
-              <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
+                <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
               </Link>
               <Link to={`/profile/${post.username}`}>
                 <p className="username">{post.username}</p>
               </Link>
-              <p>{post.caption}</p>
-              {
-                yourPost && (
-                  <div>
-                    <EditPost post={post} />
-                    <DeletePost post={post} />
-                  </div>
-                )
-              }
+              <div className="d-flex justify-content-between">
+                <p>{post.caption}</p>
+                {
+                  yourPost && (
+                    <div style={{marginLeft: "10px"}}>
+                      <EditPost post={post} />
+                      <DeletePost post={post} />
+                    </div>
+                  )
+                }
+              </div>
+
               <hr />
               <CommentSection postID={postID}/>
               <hr />

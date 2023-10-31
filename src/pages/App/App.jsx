@@ -28,6 +28,7 @@ import NavBar from "../../components/NavBar/NavBar";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import SignUpForm from "../../components/SignUpForm/SignUpForm";
 import Footer from "../../components/Footer/Footer";
+import AdminPage from "../AdminPage/AdminPage";
 
 
 export default function App() {
@@ -47,7 +48,7 @@ export default function App() {
       <>
         <NavBar user={user} updateUser={updateUser}/>
         <Routes>
-          <Route path='/' element={<HomePage />} />
+          <Route path='/' element={ user.permissions === "admin" ? <AdminPage /> : <HomePage />} />
           <Route path='/profile/:username' element={<ProfilePage />} />
           <Route path='/profile/:username/:postID' element={<PostPage />} />
           <Route path='/search' element={<SearchPage />} />

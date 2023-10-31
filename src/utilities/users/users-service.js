@@ -1,5 +1,5 @@
 import { showFollowsService } from "../followers/followers-service";
-import { signUpAPI, loginAPI, getAllUsersAPI, deleteUserAPI, uploadToS3API, updateProfilePicAPI, updateUserBioAPI, getLoggedInUserAPI } from "./users-api";
+import { signUpAPI, loginAPI, getAllUsersAdminAPI, getAllUsersAPI, deleteUserAPI, uploadToS3API, updateProfilePicAPI, updateUserBioAPI, getLoggedInUserAPI, deactivateUserAPI } from "./users-api";
 
 export async function signUpService(userData) {
   const data = await signUpAPI(userData);
@@ -11,6 +11,16 @@ export async function loginService(credentials) {
   const data = await loginAPI(credentials);
   localStorage.setItem("token", data.data.token);
   return getUser();
+}
+
+export async function getAllUsersAdminService() {
+  const users = await getAllUsersAdminAPI(getUser().permissions);
+  return users;
+}
+
+export async function deactivateUserService(userID, action) {
+  const user = await deactivateUserAPI(userID, action, getUser().permissions);
+  return user;
 }
 
 export async function getSuggestedUsersService() {

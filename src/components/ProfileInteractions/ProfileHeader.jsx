@@ -73,10 +73,10 @@ export default function ProfileHeader({ user, posts }) {
   return (
     <header className="w-100 d-flex justify-content-center align-items-center">
       <div>
-        <Link>
-          { getUser().username === user.username ? <EditProfilePic /> : "" }
-          <img src={user.profile_pic} alt="profile pic" className="profile-pic"/>
-        </Link>
+        <div>
+          { getUser().username === user.username ? <EditProfilePic photo={user.profile_pic} /> : <img src={user.profile_pic} alt="profile pic" className="profile-pic"/> }
+          
+        </div>
       </div>
 
       <div className="px-5" style={{width: "500px"}}>
@@ -86,9 +86,15 @@ export default function ProfileHeader({ user, posts }) {
         </div>
 
         <div className="d-flex justify-content-between mb-2">
-          <p><span className="username">{posts.length}</span> posts</p>
-          <p><span className="username">{followerCount}</span> followers</p>
-          <p><span className="username">{following.length}</span> following</p>
+          <p>
+            <span className="username">{posts.length}</span> post{ posts.length === 1 ? "" : "s" }
+          </p>
+          <p>
+            <span className="username">{followerCount}</span> follower{ followerCount === 1 ? "" : "s" }
+          </p>
+          <p>
+            <span className="username">{following.length}</span> following
+          </p>
         </div>
 
         <div className="mb-2">

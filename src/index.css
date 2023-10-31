@@ -56,6 +56,14 @@ body {
   border-radius: 5px;
 }
 
+.image-grid img:hover {
+  opacity: 0.8;
+}
+
+.opacity-8:hover {
+  opacity: 0.8;
+}
+
 .pink-bg {
   background-color: #FFF0F5;
 }
@@ -64,6 +72,7 @@ body {
   width: 500px;
   height: 500px;
   object-fit: cover;
+  border-radius: 5px;
 }
 
 .default-button {
@@ -131,7 +140,6 @@ a {
   display: grid;
   grid-template-columns: 0.7fr 1fr 2fr 1fr;
   align-items: center;
-  justify-content: ;
   margin: 10px;
   padding-bottom: 10px;
 }
@@ -175,4 +183,12 @@ a {
 
 .profile-header text {
   display: grid;
+}
+
+.edit-text:hover {
+  opacity: 0.5;
+}
+
+.table {
+  color: inherit;
 }

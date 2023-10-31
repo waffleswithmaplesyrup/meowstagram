@@ -10,6 +10,14 @@ export function loginAPI(credentials) {
   return sendRequest(`${BASE_URL}/login`, "POST", credentials);
 }
 
+export function getAllUsersAdminAPI(userPermission) {
+  return sendRequest(`${BASE_URL}/readAll/${userPermission}`);
+}
+
+export function deactivateUserAPI(userID, action, authorisation) {
+  return sendRequest(`${BASE_URL}/deactivate/${authorisation}/${userID}`, "PATCH", { permissions: action });
+}
+
 export function getAllUsersAPI() {
   return sendRequest(`${BASE_URL}/readAll`);
 }

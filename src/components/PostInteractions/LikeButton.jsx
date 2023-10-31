@@ -41,7 +41,7 @@ export default function LikeButton({ postID }) {
   };
 
   return (
-    <div className="my-3">
+    <div className="my-1">
     { liked ? 
       <FontAwesomeIcon onClick={handleUnlike} 
       icon={solid.faHeart} style={{color: "#ff3040"}} className="interaction"/>
