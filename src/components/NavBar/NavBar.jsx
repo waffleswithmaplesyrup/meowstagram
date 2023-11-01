@@ -22,31 +22,44 @@ export default function NavBar ({ user, updateUser }) {
     event.preventDefault();
     setStatus("loading");
 
-    try {
-      await logOutService();
-      updateUser(null);
+    const prompt = await Swal.fire({
+      ...swalBasicSettings("Proceed to logout?", "warning"),
+      text: `Are you sure you want to log out of ${user.username}?`,
+      showCancelButton: true,
+      confirmButtonText: "LOGOUT",
+      cancelButtonText: "CANCEL",
+    });
 
-      Swal.fire(swalBasicSettings("Logged out successfully!", "success"))
-     
-      navigate("/");
+    if (prompt.isConfirmed) {
+      try {
+        await logOutService();
+        updateUser(null);
+  
+        Swal.fire(swalBasicSettings("Logged out successfully!", "success"))
+       
+        navigate("/");
 
-    } catch (err) {
-      if (err.message === "Unexpected end of JSON input") {
-        Swal.fire({
-          ...swalBasicSettings("Internal Server Error", "error"),
-          text: "Please try again later.",
-        });
-      } else {
-        Swal.fire({
-          ...swalBasicSettings("Error", "error"),
-          text: err.message,
-          confirmButtonText: "Try Again",
-        });
+  
+      } catch (err) {
+        if (err.message === "Unexpected end of JSON input") {
+          Swal.fire({
+            ...swalBasicSettings("Internal Server Error", "error"),
+            text: "Please try again later.",
+          });
+        } else {
+          Swal.fire({
+            ...swalBasicSettings("Error", "error"),
+            text: err.message,
+            confirmButtonText: "Try Again",
+          });
+        }
+        setStatus("error");
+      } finally {
+        setStatus("success");
       }
-      setStatus("error");
-    } finally {
-      setStatus("success");
     }
+
+    
     
   };
 
@@ -100,7 +113,7 @@ export default function NavBar ({ user, updateUser }) {
     </ul>
     <hr />
     <div>
-      <Link to='/' className="nav-link link-dark" onClick={handleLogout}>Logout</Link>
+      <Link to='/' className="nav-link link-dark d-flex justify-content-between align-items-center" onClick={handleLogout}>Logout <FontAwesomeIcon icon={solid.faRightFromBracket} style={{color: "#2B0806"}} className="interaction"/></Link>
     </div>
   </nav>
     
