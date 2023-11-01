@@ -5,7 +5,7 @@ import { getUser } from "../../utilities/users/users-service";
 
 export default function FollowButton({ followers, changeFollowerCount }) {
   const { username } = useParams();
-  // console.log(followers);
+ 
   const [isFollowing, setIsFollowing] = useState(false);
   const [count, setCount] = useState(followers);
 
@@ -18,18 +18,18 @@ export default function FollowButton({ followers, changeFollowerCount }) {
   }, [username]);
 
   const handleUnfollow = async () => {
-    // console.log("unfollow", username);
+    
     const unfollow = await unfollowUserService(username);
-    // console.log(unfollow);
+    
     setIsFollowing(false);
 
     changeFollowerCount("unfollow");
   };
 
   const handleFollow = async () => {
-    // console.log("follow", username);
+    
     const follow = await followUserService(username);
-    // console.log(follow);
+    
     setIsFollowing(true);
 
     changeFollowerCount("follow");

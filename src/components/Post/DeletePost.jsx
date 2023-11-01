@@ -11,7 +11,6 @@ import * as solid from '@fortawesome/free-solid-svg-icons';
 export default function DeletePost({ post }) {
 
   const handleDelete = async () => {
-    console.log("delete post id:", post.id);
     
     const prompt = await Swal.fire({
       ...swalBasicSettings("Proceed to delete?", "warning"),
@@ -44,7 +43,7 @@ export default function DeletePost({ post }) {
               }
             }).then((result) => {
               if (result.dismiss === Swal.DismissReason.timer) {
-                console.log('I was closed by the timer')
+                
                 window.location = `/profile/${post.username}`;
               }
             })

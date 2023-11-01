@@ -2,7 +2,6 @@
   "name": "meowstagram",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://meowstagram.onrender.com/",
   "scripts": {
     "dev": "vite",
     "dev:express": "set DEBUG=meowstagram* & nodemon backend/server.js",

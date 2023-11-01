@@ -20,7 +20,7 @@ export default function SearchPage () {
 
     try {
       const data = await searchUsersService(keyword);
-      // console.log(data);
+      
       setUsers(data);
       
     } catch (err) {

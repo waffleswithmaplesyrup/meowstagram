@@ -30,7 +30,7 @@ export default function DeleteButton({ comment, filterAfterDelete }) {
 
         Swal.fire(swalBasicSettings("Deleted!", "success"));
       } catch (err) {
-        console.error(err);
+        // console.error(err);
         Swal.fire({
           ...swalBasicSettings("Error", "error"),
           text: "Unable to delete. Please try again!",

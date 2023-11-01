@@ -18,8 +18,8 @@ export default function CreateNewComment({ username, postID }) {
     setStatus("loading");
 
     try {
-      const newComment = await createNewCommentService(postID, content);
-      console.log('new comment created:', newComment);
+      await createNewCommentService(postID, content);
+      
       Swal.fire(swalBasicSettings("Posted comment successfully!", "success"))
       .then((result) => {
         if (result.isConfirmed) {
@@ -40,7 +40,7 @@ export default function CreateNewComment({ username, postID }) {
             }
           }).then((result) => {
             if (result.dismiss === Swal.DismissReason.timer) {
-              console.log('I was closed by the timer')
+              // console.log('I was closed by the timer')
               window.location.reload();
             }
           })

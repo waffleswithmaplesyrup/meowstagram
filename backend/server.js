@@ -21,7 +21,7 @@ const app = express();
 //* Middlewares
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "dist")));
+app.use(express.static(path.join(__dirname, "../dist")));
 // Middleware to verify token and assign user object of payload to req.user.
 app.use(checkToken);
 

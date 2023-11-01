@@ -5,7 +5,6 @@ import LikeButton from "../PostInteractions/LikeButton";
 import { Bookmark } from "./Bookmark";
 
 export default function FeedCard({ post, location }) {
-  // console.log(post);
 
   const datePosted = new Date(post.date_posted);
   const date = post.date_posted
@@ -44,10 +43,6 @@ export default function FeedCard({ post, location }) {
     duration = duration  + ` millisecond${duration === 1 ? "" : "s"} ago`;
 
   }
-  
-
-  console.log(`${post.username}`, duration);
-
 
   return (
     <div className="pb-3">

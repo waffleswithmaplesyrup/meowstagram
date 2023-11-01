@@ -20,7 +20,7 @@ export default function LikeButton({ postID }) {
       if (likesData.filter(like => like.sender_id === getUser().id).length > 0) {
         setliked(true);
       }
-      // console.log(likesData);
+      
       setLikes(likesData);
       setLikesCount(likesData.length);
     };

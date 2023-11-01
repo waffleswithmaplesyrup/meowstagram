@@ -36,7 +36,6 @@ export default function LoginForm({ updateUser }) {
 
     try {
       const user = await signUpService(credentials);
-      console.log(user);
 
       updateUser(user);
 

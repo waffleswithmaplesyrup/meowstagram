@@ -40,8 +40,6 @@ export default function App() {
     setUser(update);
   };
 
-  // console.log(user);
-
   return (
    <main className="d-flex justify-content-between">
     {

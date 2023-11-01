@@ -18,7 +18,7 @@ export default function AdminPage() {
     const fetchUsers = async () => {
       try {
         const data = await getAllUsersAdminService();
-        // console.log(data);
+        
         setUsers(data);
         
       } catch (err) {

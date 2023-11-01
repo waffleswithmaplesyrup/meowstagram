@@ -27,7 +27,7 @@ export default function CreatePage () {
   });
 
   const handleImgFileInput = (e) => {
-    console.log(e.target.files[0]);
+    
     setSelectedImage(e.target.files[0]);
 
     const imgFiles = Array.from(e.target.files);
@@ -65,8 +65,6 @@ export default function CreatePage () {
         photo: imgURL,
         caption: caption
       });
-      console.log('new post created:', newPost);
-      // navigate(`/profile/${getUser().username}/${newPost.id}`);
 
       Swal.fire(swalBasicSettings("Uploaded new post successfully!", "success"))
       .then((result) => {
@@ -88,8 +86,7 @@ export default function CreatePage () {
             }
           }).then((result) => {
             if (result.dismiss === Swal.DismissReason.timer) {
-              console.log('I was closed by the timer')
-              // window.location.reload();
+              
               navigate(`/profile/${getUser().username}/${newPost.id}`);
             }
           })
