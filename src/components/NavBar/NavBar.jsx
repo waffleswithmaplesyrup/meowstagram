@@ -4,6 +4,11 @@ import ReactLoading from "react-loading";
 
 import { logOutService } from "../../utilities/users/users-service";
 
+//* font awesome
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as solid from '@fortawesome/free-solid-svg-icons';
+import * as regular from '@fortawesome/free-regular-svg-icons';
+
 //* sweet alert
 import Swal from 'sweetalert2';
 import { swalBasicSettings } from "../../utilities/posts/posts-service";
@@ -60,24 +65,28 @@ export default function NavBar ({ user, updateUser }) {
     <ul className="nav nav-pills flex-column mb-auto">
       <li>
         <Link to="/" className="nav-link link-dark">
+          <FontAwesomeIcon icon={solid.faHouse} style={{color: "#2B0806"}} className="interaction"/>
           <svg className="bi me-2" width="16" height="16"><use xlinkHref="#speedometer2"></use></svg>
           Home
         </Link>
       </li>
       <li>
         <Link to='/search' className="nav-link link-dark">
+          <FontAwesomeIcon icon={solid.faMagnifyingGlass} style={{color: "#2B0806"}} className="interaction"/>
           <svg className="bi me-2" width="16" height="16"><use xlinkHref="#speedometer2"></use></svg>
           Search
         </Link>
       </li>
       <li>
         <Link to='/create' className="nav-link link-dark">
+          <FontAwesomeIcon icon={regular.faPlusSquare} style={{color: "#2B0806"}} className="interaction"/>
           <svg className="bi me-2" width="16" height="16"><use xlinkHref="#table"></use></svg>
           Create
         </Link>
       </li>
       <li>
         <Link to='/bookmarked' className="nav-link link-dark">
+        <FontAwesomeIcon icon={regular.faBookmark} style={{color: "#2B0806"}} className="interaction"/>
           <svg className="bi me-2" width="16" height="16"><use xlinkHref="#table"></use></svg>
           Bookmarked
         </Link>
