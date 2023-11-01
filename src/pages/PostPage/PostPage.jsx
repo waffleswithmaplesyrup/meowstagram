@@ -17,6 +17,7 @@ import CreateNewComment from "../../components/CommentSection/CreateNewComment";
 //* sweet alert
 import Swal from 'sweetalert2';
 import { swalBasicSettings } from "../../utilities/posts/posts-service";
+import { Bookmark } from "../../components/Feed/Bookmark";
 
 
 export default function PostPage () {
@@ -70,18 +71,17 @@ export default function PostPage () {
               <img className="post-image" src={post.photo} alt="post image" />
               <div className="d-flex justify-content-between my-2">
                 <LikeButton postID={postID} />
-                <p className="text-end">{date.toDateString()}</p>
+                <Bookmark postID={postID} />
               </div>
             </div>
 
             <div className="m-5" style={{width: "500px"}}>
-              <div className="d-flex align-items-center">
-                <Link to={`/profile/${post.username}`}>
+              <div className="d-flex justify-content-between">
+                <Link to={`/profile/${post.username}`} className="d-flex">
                   <img className="profile-pic-small" src={post.profile_pic} alt="profile pic"/>
+                  <p className="username px-2">{post.username}</p>
                 </Link>
-                <Link className="mx-3" to={`/profile/${post.username}`}>
-                  <p className="username">{post.username}</p>
-                </Link>
+                <p className="text-end">{date.toDateString()}</p>
               </div>
               
               <div className="d-flex justify-content-between my-3">

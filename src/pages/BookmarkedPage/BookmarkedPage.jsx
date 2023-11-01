@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 
-import { showFeedService } from "../../utilities/followers/followers-service";
-import { getUser } from "../../utilities/users/users-service";
-
-import FeedCard from "./FeedCard";
+import FeedCard from "../../components/Feed/FeedCard";
 
 //* sweet alert
 import Swal from 'sweetalert2';
 import { swalBasicSettings } from "../../utilities/posts/posts-service";
+import { showAllUserBookmarksService } from "../../utilities/bookmarks/bookmarks-service";
 
 export default function Feed () {
   const [feed, setFeed] = useState([]);
@@ -17,7 +15,7 @@ export default function Feed () {
   useEffect(() => {
     const fetchFeed = async () => {
       try {
-        const data = await showFeedService(getUser().username); 
+        const data = await showAllUserBookmarksService();
         setFeed(data);
 
       } catch (err) {
@@ -47,23 +45,18 @@ export default function Feed () {
     </div>
   }
 
-  let isEmpty = true;
-
-  feed?.map(post => {
-    if (post.id !== null) {
-      isEmpty = false;
-    }
-  });
-
-
-
   return (
-    <div className="pt-5">
-      {
-        feed.length === 0 ? <p>Start following frens to see their posts!</p>
-        : isEmpty ? <p>Your frens don't have anything right meow :(</p> :
-        feed.map(value => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(({ value }) => value)?.map(post => <FeedCard key={post.id} post={post} location="feed" />)
-      }
+    <div className="w-100 text-center py-5">
+      <p className="username">Bookmarked</p>
+      <hr />
+
+      <div className="w-100 my-5 pt-5 d-flex row justify-content-center">
+        {
+          feed.length === 0 ? <p>No posts saved in your bookmarks yet!</p>
+          :
+          feed.map(value => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(({ value }) => value)?.map(post => <FeedCard key={post.id} post={post} location="bookmarks" />)
+        }
+      </div>
     </div>
   );
 }

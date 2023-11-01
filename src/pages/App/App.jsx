@@ -15,6 +15,7 @@ import { getUser } from "../../utilities/users/users-service";
 import HomePage from "../HomePage/HomePage";
 import SearchPage from "../SearchPage/SearchPage";
 import CreatePage from "../CreatePage/CreatePage";
+import BookmarkedPage from "../BookmarkedPage/BookmarkedPage";
 import DonatePage from "../DonatePage/DonatePage";
 import AuthPage from "../AuthPage/AuthPage";
 import LandingPage from "../LandingPage/LandingPage";
@@ -53,6 +54,7 @@ export default function App() {
           <Route path='/profile/:username/:postID' element={<PostPage />} />
           <Route path='/search' element={<SearchPage />} />
           <Route path='/create' element={<CreatePage />} />
+          <Route path='/bookmarked' element={<BookmarkedPage />} />
           <Route path='/donate' element={<DonatePage />} />
         </Routes>
       </> ) : (

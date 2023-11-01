@@ -26,3 +26,9 @@ CREATE TABLE comments (
   post_id varchar NOT NULL REFERENCES posts (id),
   sender_id integer NOT NULL REFERENCES users (id)
 );
+
+CREATE TABLE bookmarks (
+	id serial PRIMARY KEY,
+  post_id varchar NOT NULL REFERENCES posts (id),
+  user_id integer NOT NULL REFERENCES users (id)
+);

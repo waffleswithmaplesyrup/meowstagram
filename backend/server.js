@@ -13,6 +13,7 @@ const postsRouter = require("./routes/postsRouter");
 const commentsRouter = require("./routes/commentsRouter");
 const likesRouter = require("./routes/likesRouter");
 const followersRouter = require("./routes/followersRouter");
+const bookmarksRouter = require("./routes/bookmarksRouter");
 
 //* App
 const app = express();
@@ -26,12 +27,11 @@ app.use(checkToken);
 
 //* Routes -> all routes to start with /api
 app.use("/api/users", usersRouter);
-// app.use("/api/posts", ensureLoggedIn, postsRouter);
-app.use("/api/posts", postsRouter);
-app.use("/api/comments", commentsRouter);
-app.use("/api/likes", likesRouter);
-// app.use("/api/followers", ensureLoggedIn, followersRouter);
-app.use("/api/followers", followersRouter);
+app.use("/api/posts", ensureLoggedIn, postsRouter);
+app.use("/api/comments", ensureLoggedIn,commentsRouter);
+app.use("/api/likes", ensureLoggedIn, likesRouter);
+app.use("/api/followers", ensureLoggedIn, followersRouter);
+app.use("/api/bookmarks", ensureLoggedIn, bookmarksRouter);
 
 //? This should be the last route -> this is for react router
 app.get("/*", (req, res) => {

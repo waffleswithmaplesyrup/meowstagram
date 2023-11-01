@@ -76,6 +76,12 @@ export default function NavBar ({ user, updateUser }) {
           Create
         </Link>
       </li>
+      <li>
+        <Link to='/bookmarked' className="nav-link link-dark">
+          <svg className="bi me-2" width="16" height="16"><use xlinkHref="#table"></use></svg>
+          Bookmarked
+        </Link>
+      </li>
       {/* <li>
         <Link to='/donate' className="nav-link link-dark">
           <svg className="bi me-2" width="16" height="16"><use xlinkHref="#grid"></use></svg>

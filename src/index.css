@@ -135,6 +135,7 @@ a {
 .username {
   font-weight: bold;
   color: #2B0806;
+  margin: 0;
 }
 
 .comment-card {
