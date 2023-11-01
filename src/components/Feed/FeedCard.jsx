@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import PostAuthor from "../PostAuthor/PostAuthor";
-import PostInteractions from "../PostInteractions/PostInteractions";
 import LikeButton from "../PostInteractions/LikeButton";
 import { Bookmark } from "./Bookmark";
 
