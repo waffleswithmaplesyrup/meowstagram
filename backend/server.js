@@ -35,7 +35,7 @@ app.use("/api/bookmarks", ensureLoggedIn, bookmarksRouter);
 
 //? This should be the last route -> this is for react router
 app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "../dist", "index.html"));
 });
 
 //* Listener
