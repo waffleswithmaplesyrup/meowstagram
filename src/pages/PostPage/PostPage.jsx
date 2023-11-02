@@ -78,7 +78,7 @@ export default function PostPage () {
           <>
             <div className="m-5" style={{width: "500px"}} >
               {
-                isvideo ? <video className="post-image" src={post.photo} alt="post video" controls/> 
+                isvideo ? <video className="post-image" src={post.photo} alt="post video" controls autoPlay muted /> 
                 : <img className="post-image" src={post.photo} alt="post image" />
               }
               

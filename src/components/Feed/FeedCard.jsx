@@ -51,7 +51,7 @@ export default function FeedCard({ post, location }) {
         <div className="m-auto" style={{width: "500px"}}>
           <Link to={`/profile/${post.username}/${post.id}`}>
             {
-              isVideo ? <video className="post-image opacity-8" src={post.photo} alt="post video" controls/> 
+              isVideo ? <video className="post-image opacity-8" src={post.photo} alt="post video" controls autoPlay muted /> 
               : <img className="post-image opacity-8" src={post.photo} alt="feed pic" />
             }
           </Link>
