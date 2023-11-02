@@ -61,7 +61,6 @@ export default function AdminPage() {
               <tr>
                 <th scope="col">Profile</th>
                 <th scope="col">Username</th>
-                <th scope="col">Email</th>
                 <th scope="col">Permissions</th>
                 <th scope="col">Action</th>
               </tr>

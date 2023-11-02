@@ -77,43 +77,42 @@ export default function NavBar ({ user, updateUser }) {
     <br />
     <ul className="nav nav-pills flex-column mb-auto">
       <li>
-        <Link to="/" className="nav-link link-dark">
-          <FontAwesomeIcon icon={solid.faHouse} style={{color: "#2B0806"}} className="interaction"/>
-          <svg className="bi me-2" width="16" height="16"><use xlinkHref="#speedometer2"></use></svg>
-          Home
+        <Link to="/" className="nav-link link-dark d-flex">
+          <div className="d-flex justify-content-center" style={{width: "25px"}}>
+            <FontAwesomeIcon icon={solid.faHouse} style={{color: "#695F5F"}} className="interaction"/>
+          </div>
+          <p className="px-3">Home</p>
         </Link>
       </li>
       <li>
-        <Link to='/search' className="nav-link link-dark">
-          <FontAwesomeIcon icon={solid.faMagnifyingGlass} style={{color: "#2B0806"}} className="interaction"/>
-          <svg className="bi me-2" width="16" height="16"><use xlinkHref="#speedometer2"></use></svg>
-          Search
+        <Link to='/search' className="nav-link link-dark d-flex">
+          <div className="d-flex justify-content-center" style={{width: "25px"}}>
+            <FontAwesomeIcon icon={solid.faMagnifyingGlass} style={{color: "#695F5F"}} className="interaction"/>
+          </div>
+          <p className="px-3">Search</p>
         </Link>
       </li>
       <li>
-        <Link to='/create' className="nav-link link-dark">
-          <FontAwesomeIcon icon={regular.faPlusSquare} style={{color: "#2B0806"}} className="interaction"/>
-          <svg className="bi me-2" width="16" height="16"><use xlinkHref="#table"></use></svg>
-          Create
+        <Link to='/create' className="nav-link link-dark d-flex">
+          <div className="d-flex justify-content-center" style={{width: "25px"}}>
+            <FontAwesomeIcon icon={regular.faPlusSquare} style={{color: "#695F5F"}} className="interaction"/>
+          </div>
+          <p className="px-3">Create</p>
         </Link>
       </li>
       <li>
-        <Link to='/bookmarked' className="nav-link link-dark">
-        <FontAwesomeIcon icon={regular.faBookmark} style={{color: "#2B0806"}} className="interaction"/>
-          <svg className="bi me-2" width="16" height="16"><use xlinkHref="#table"></use></svg>
-          Bookmarked
+        <Link to='/bookmarked' className="nav-link link-dark d-flex">
+          <div className="d-flex justify-content-center" style={{width: "25px"}}>
+            <FontAwesomeIcon icon={regular.faBookmark} style={{color: "#695F5F"}} className="interaction"/>
+          </div>
+          <p className="px-3">Bookmarked</p>
         </Link>
       </li>
-      {/* <li>
-        <Link to='/donate' className="nav-link link-dark">
-          <svg className="bi me-2" width="16" height="16"><use xlinkHref="#grid"></use></svg>
-          Donate
-        </Link>
-      </li> */}
     </ul>
     <hr />
     <div>
-      <Link to='/' className="nav-link link-dark d-flex justify-content-between align-items-center" onClick={handleLogout}>Logout <FontAwesomeIcon icon={solid.faRightFromBracket} style={{color: "#2B0806"}} className="interaction"/></Link>
+      <Link to='/' style={{color: "#695F5F"}} className="nav-link link-dark d-flex justify-content-between align-items-center" 
+      onClick={handleLogout}>Logout <FontAwesomeIcon icon={solid.faRightFromBracket} style={{color: "#695F5F"}} className="interaction"/></Link>
     </div>
   </nav>
     

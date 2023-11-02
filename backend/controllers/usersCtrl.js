@@ -24,11 +24,15 @@ async function signup(req, res) {
     const token = createJWT(newUser);
     sendResponse(res, 201, { token: token });
   } catch (err) {
-    debug("Error creating: %o", err);
+    debug("Error creating: %o", err.message);
 
     let status = 500;
     let message = "Internal Server Error";
 
+    if (err.message === "Password is too short. Please input at least 8 characters") {
+      status = 409;
+      message = "Password is too short. Please input at least 8 characters.";
+    }
     if (err.code === '23505' && err.constraint === 'users_username_key') {
       status = 409;
       message = "Username already exists.";

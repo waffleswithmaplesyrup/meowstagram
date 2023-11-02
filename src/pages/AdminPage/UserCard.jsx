@@ -74,7 +74,6 @@ export default function UserCard({ user }) {
     <tr>
       <th scope="row"><Link to={`/profile/${user.username}`}><img className="profile-pic-small" src={user.profile_pic} alt="profile pic"/></Link></th>
       <th scope="row">{user.username}</th>
-      <td>{user.email}</td>
       <td>{permissions}</td>
       <td>
         {
