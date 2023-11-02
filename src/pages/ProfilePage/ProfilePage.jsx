@@ -13,6 +13,10 @@ import ProfileHeader from "../../components/ProfileInteractions/ProfileHeader";
 import Swal from 'sweetalert2';
 import { swalBasicSettings } from "../../utilities/posts/posts-service";
 
+//* font awesome
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as solid from '@fortawesome/free-solid-svg-icons';
+
 
 export default function ProfilePage () {
   const { username } = useParams();
@@ -70,10 +74,22 @@ export default function ProfilePage () {
       
       <hr />
 
-      { posts.length === 0 ? <p>user has no posts yet</p> : <div className="image-grid text-center"> { posts?.map(post => <Link to={`/profile/${username}/${post.id}`} key={post.id}><img src={post.photo} alt="post"/></Link>) } </div> }
+      { posts.length === 0 ? <p>user has no posts yet</p> : <div className="image-grid text-center"> { posts?.map(post => {
+        const url = post.photo.toLowerCase()
+        const isVideo = url.includes('.mov') || url.includes('.mp4') || url.includes('.mwv') || url.includes('.avi') || url.includes('.webm');
+        
+        return <Link to={`/profile/${username}/${post.id}`} key={post.id}>
+        {
+          isVideo ? <div style={{position: "relative", zIndex: "1"}}>
+            <video src={post.photo} style={{position: "relative", zIndex: "2"}}/>
+            <FontAwesomeIcon icon={solid.faPlay} style={{color: "#FFF0F5", position: "absolute", right: "20px", bottom: "20px", zIndex: "3",}} className="interaction" />
+          </div>
+          : <img src={post.photo} alt="post"/>
+        }
+        </Link>
+        }) 
+      } </div> }
 
     </div>
   );
 }
-
-// className="image-grid"

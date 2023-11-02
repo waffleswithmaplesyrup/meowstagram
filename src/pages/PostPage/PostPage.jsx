@@ -25,7 +25,8 @@ export default function PostPage () {
   const [loading, setLoading] = useState(true);
 
   const [post, setPost] = useState([]);
-  
+  const [isvideo, setIsVideo] = useState(false);
+
   const yourPost = username === getUser().username;
 
   useEffect(() => {
@@ -33,6 +34,14 @@ export default function PostPage () {
       try {
         const data = await viewOnePostService(username, postID);
         setPost(data);
+
+        const url = data.photo.toLowerCase();
+
+        if (url.includes('.mov') || url.includes('.mp4') || url.includes('.mwv')
+        || url.includes('.avi') || url.includes('.webm') ) {
+          setIsVideo(true);
+        }
+
       } catch (err) {
         if (err.message === "Unexpected end of JSON input") {
           Swal.fire({
@@ -68,7 +77,11 @@ export default function PostPage () {
         post.length === 0 ? "no post found" : (
           <>
             <div className="m-5" style={{width: "500px"}} >
-              <img className="post-image" src={post.photo} alt="post image" />
+              {
+                isvideo ? <video className="post-image" src={post.photo} alt="post video" controls/> 
+                : <img className="post-image" src={post.photo} alt="post image" />
+              }
+              
               <div className="d-flex justify-content-between my-2">
                 <LikeButton postID={postID} />
                 <Bookmark postID={postID} />

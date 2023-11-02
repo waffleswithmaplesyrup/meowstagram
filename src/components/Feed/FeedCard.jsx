@@ -4,8 +4,10 @@ import { Bookmark } from "./Bookmark";
 
 export default function FeedCard({ post, location }) {
 
+  const url = post.photo.toLowerCase();
+  const isVideo = url.includes('.mov') || url.includes('.mp4') || url.includes('.mwv') || url.includes('.avi') || url.includes('.webm');
+
   const datePosted = new Date(post.date_posted);
-  const date = post.date_posted
 
   const currentDate = new Date();
 
@@ -48,7 +50,10 @@ export default function FeedCard({ post, location }) {
         post.id ?
         <div className="m-auto" style={{width: "500px"}}>
           <Link to={`/profile/${post.username}/${post.id}`}>
-            <img src={post.photo} alt='feed pic' className="post-image opacity-8"/>
+            {
+              isVideo ? <video className="post-image opacity-8" src={post.photo} alt="post video" controls/> 
+              : <img className="post-image opacity-8" src={post.photo} alt="feed pic" />
+            }
           </Link>
           <div className='d-flex justify-content-between my-2'>
             <LikeButton postID={post.id} />

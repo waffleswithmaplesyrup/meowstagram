@@ -50,14 +50,14 @@ body {
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-.image-grid img {
+.image-grid img, .image-grid video {
   width: 250px;
   height: 250px;
   object-fit: cover;
   border-radius: 5px;
 }
 
-.image-grid img:hover {
+.image-grid img:hover, .image-grid video:hover {
   opacity: 0.8;
 }
 
