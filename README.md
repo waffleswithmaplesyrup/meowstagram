@@ -20,7 +20,7 @@ Meowstagram is a social media application that brings the world of Instagram int
 
 Meowstagram is not just another social app; it's the ultimate destination for cat enthusiasts, designed to offer a delightful and immersive experience. Dive into the world of Meowstagram, where users can connect and share their love for all things feline. Whether you're a cat owner, a cat fanatic, or simply adore these adorable creatures, Meowstagram is the ideal place for you.
 
-<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/meowstagram/main/public/products.png">
+<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/meowstagram/main/public/readme/profile.png">
 
 ## Features
 
@@ -79,11 +79,11 @@ Using Meowstagram is straightforward:
 
 9. **Access Bookmarked Posts:** Visit the Bookmarks page to view all your saved posts in one place.
 
-<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/e-commerce-app/main/public/login.png">
+<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/meowstagram/main/public/readme/signup.png">
 
-<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/e-commerce-app/main/public/product-info.png">
+<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/meowstagram/main/public/readme/home.png">
 
-<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/e-commerce-app/main/public/cart-page.png">
+<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/meowstagram/main/public/readme/post.png">
 
 ## Design Process
 
@@ -93,7 +93,7 @@ Using [Trello](https://trello.com/), I created a workspace where I ask myself qu
 
 In order to store data, I need to know what are the entity relationships needed to effectively POST, DELETE, GET and PATCH relevant data. Using [Lucid Chart](https://www.lucidchart.com/pages/landing?utm_source=google&utm_medium=cpc&utm_campaign=_chart_en_tier3_mixed_search_brand_exact_&km_CPC_CampaignId=1484560207&km_CPC_AdGroupID=60168114191&km_CPC_Keyword=lucid%20chart&km_CPC_MatchType=e&km_CPC_ExtensionID=&km_CPC_Network=g&km_CPC_AdPosition=&km_CPC_Creative=442433234360&km_CPC_TargetID=kwd-55720648523&km_CPC_Country=9062513&km_CPC_Device=c&km_CPC_placement=&km_CPC_target=&gclid=CjwKCAjwkY2qBhBDEiwAoQXK5QM74ifkV_APJ7fM_eo46VfFtg1lK7ztcCE34l1mWtvR7Ks_x1AmWRoCUvkQAvD_BwE), I was able to come up with an Entity Relationship Diagram to visualise the relationships between the entities like users, posts, comments, followers. [Here](https://lucid.app/lucidchart/48224ff1-3f55-4496-b81b-526a9f120efb/edit?viewport_loc=114%2C-90%2C1646%2C1638%2C0_0&invitationId=inv_fca1f78a-809b-4f09-b2ea-69d7f89c168d) is my ERD for Meowstagram.
 
-<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/e-commerce-app/main/public/trello.png">
+<img src="https://raw.githubusercontent.com/waffleswithmaplesyrup/meowstagram/main/public/readme/create.png">
 
 ## Challenges
 
